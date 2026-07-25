@@ -6,13 +6,10 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
-  { href: "#inicio", label: "Inicio" },
-  { href: "#sobre-nosotros", label: "Nosotros" },
-  { href: "#instalaciones", label: "Instalaciones" },
-  { href: "#galeria", label: "Galería" },
-  { href: "#eventos", label: "Eventos" },
-  { href: "#incluye", label: "Precios" },
-  { href: "#faq", label: "FAQ" },
+  { name: "Inicio", href: "#inicio" },
+  { name: "Instalaciones", href: "#instalaciones" },
+  { name: "Galería", href: "#galeria" },
+  { name: "Ubicación", href: "#ubicacion" },
 ];
 
 export default function Navbar() {
@@ -23,29 +20,30 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Bloquear scroll si el menú móvil está abierto
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileMenuOpen]);
-
-  const scrollToSection = (e: React.MouseEvent<HTMLElement>, href: string) => {
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
-    const target = document.querySelector(href);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth" });
+    
+    // Si es "#inicio", subir arriba del todo
+    if (href === "#inicio") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const element = document.querySelector(href);
+    if (element) {
+      const offset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
   };
 
@@ -55,129 +53,129 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-0 left-0 w-full z-50 transition-all duration-500"
-        style={{
-          background: scrolled ? "rgba(250,248,244,0.92)" : "transparent",
-          backdropFilter: scrolled ? "blur(12px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(28,26,23,0.05)" : "1px solid transparent",
-          padding: scrolled ? "0.75rem 0" : "1.5rem 0",
-        }}
-        role="navigation"
-        aria-label="Menú principal"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out border-b border-white/5 backdrop-blur-md ${
+          scrolled 
+            ? "py-3 bg-black/80 shadow-lg shadow-black/10" 
+            : "py-6 bg-black/40"
+        }`}
       >
-        <div className="container-max flex items-center justify-between">
-          {/* LOGO */}
-          <a
-            href="#inicio"
-            onClick={(e) => scrollToSection(e, "#inicio")}
-            className="relative z-50 flex items-center gap-3 group"
-            aria-label="Ir a Inicio"
-          >
-            <div className={`transition-colors duration-300 w-32 md:w-40 h-10 relative ${scrolled ? "text-dark" : "text-white"}`}>
-              <Image 
-                src="/images/logo-corrihuelo.svg"
-                alt="El Corrihuelo Logo"
-                fill
-                priority
-                className="object-contain object-left group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-          </a>
+        <div className="container-max mx-auto px-4 md:px-6">
+          {/* MOBILE LAYOUT (Logo Center, Hamburger Left, Nothing right to keep balance, or button right) */}
+          <div className="flex items-center justify-between lg:hidden">
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-white hover:text-gold transition-colors z-50 p-2 -ml-2"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+            
+            <a
+              href="#inicio"
+              onClick={(e) => scrollToSection(e, "#inicio")}
+              className="relative z-50 flex items-center justify-center flex-grow"
+              aria-label="Ir a Inicio"
+            >
+              <div className="relative w-48 h-12 transition-transform duration-300 active:scale-95">
+                <Image 
+                  src="/images/logo-corrihuelo.svg"
+                  alt="El Corrihuelo Logo"
+                  fill
+                  priority
+                  className="object-contain object-center"
+                />
+              </div>
+            </a>
+            
+            {/* Empty div to balance the hamburger menu and keep logo perfectly centered */}
+            <div className="w-10"></div>
+          </div>
 
-          {/* DESKTOP MENU */}
-          <div className="hidden lg:flex items-center gap-8">
-            <div className="flex items-center gap-6">
-              {NAV_LINKS.filter((l) => l.href !== "#inicio").map((link) => (
+          {/* DESKTOP LAYOUT */}
+          <div className="hidden lg:flex items-center justify-between">
+            {/* LOGO */}
+            <a
+              href="#inicio"
+              onClick={(e) => scrollToSection(e, "#inicio")}
+              className="relative z-50 flex items-center gap-3 group"
+              aria-label="Ir a Inicio"
+            >
+              <div className={`transition-all duration-500 relative ${scrolled ? "w-44 h-11" : "w-56 h-14"}`}>
+                <Image 
+                  src="/images/logo-corrihuelo.svg"
+                  alt="El Corrihuelo Logo"
+                  fill
+                  priority
+                  className="object-contain object-left group-hover:opacity-80 transition-opacity duration-300"
+                />
+              </div>
+            </a>
+
+            {/* NAV LINKS */}
+            <div className="flex items-center gap-10">
+              {NAV_LINKS.map((link) => (
                 <a
-                  key={link.href}
+                  key={link.name}
                   href={link.href}
                   onClick={(e) => scrollToSection(e, link.href)}
-                  className={`text-sm font-medium transition-colors hover:text-gold ${
-                    scrolled ? "text-dark" : "text-white"
-                  }`}
-                  style={{
-                    fontFamily: "Inter, sans-serif",
-                    textShadow: !scrolled ? "0 2px 10px rgba(0,0,0,0.5)" : "none",
-                  }}
+                  className="text-sm font-medium tracking-wide text-white/90 hover:text-gold transition-colors duration-300 relative group py-2"
                 >
-                  {link.label}
+                  {link.name}
+                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-gold transition-all duration-300 group-hover:w-full opacity-0 group-hover:opacity-100"></span>
                 </a>
               ))}
             </div>
-            
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(e, "#reserva");
-              }}
-              className="btn-primary"
-              style={{ padding: "0.6rem 1.5rem", borderRadius: "2rem" }}
-            >
-              Reserva
-            </button>
-          </div>
 
-          {/* MOBILE TOGGLE */}
-          <button
-            className="lg:hidden relative z-50 p-2 cursor-pointer"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
-            aria-expanded={mobileMenuOpen}
-          >
-            {mobileMenuOpen ? (
-              <X size={28} className="text-dark" />
-            ) : (
-              <Menu size={28} className={scrolled ? "text-dark" : "text-white"} style={!scrolled ? { filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.5))" } : {}} />
-            )}
-          </button>
+            {/* RESERVA BUTTON */}
+            <a
+              href="#reserva"
+              onClick={(e) => scrollToSection(e, "#reserva")}
+              className="bg-gold hover:bg-[#d8b87b] text-dark font-bold text-sm tracking-wide px-8 py-3.5 rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(201,169,110,0.3)] hover:shadow-[0_0_25px_rgba(201,169,110,0.5)] transform hover:-translate-y-0.5"
+            >
+              Reserva tu fecha
+            </a>
+          </div>
         </div>
       </motion.nav>
 
-      {/* MOBILE FULLSCREEN MENU */}
+      {/* MOBILE MENU OVERLAY */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, clipPath: "circle(0% at top right)" }}
-            animate={{ opacity: 1, clipPath: "circle(150% at top right)" }}
-            exit={{ opacity: 0, clipPath: "circle(0% at top right)" }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 bg-cream flex flex-col justify-center px-8"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Menú móvil"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-dark/95 backdrop-blur-xl pt-32 px-6 pb-12 flex flex-col items-center justify-center lg:hidden"
           >
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col items-center gap-8 w-full">
               {NAV_LINKS.map((link, i) => (
                 <motion.a
-                  key={link.href}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  key={link.name}
                   href={link.href}
                   onClick={(e) => scrollToSection(e, link.href)}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + i * 0.05, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  className="font-serif text-4xl text-dark"
+                  className="font-serif text-3xl text-white hover:text-gold transition-colors"
                 >
-                  {link.label}
+                  {link.name}
                 </motion.a>
               ))}
               
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.5 }}
-                className="mt-8 pt-8 border-t border-dark/10"
+                transition={{ delay: 0.4 }}
+                className="w-full mt-8 pt-8 border-t border-white/10"
               >
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(e, "#reserva");
-                  }}
-                  className="btn-primary w-full justify-center text-lg py-4"
-                  style={{ borderRadius: "1rem" }}
+                <a
+                  href="#reserva"
+                  onClick={(e) => scrollToSection(e, "#reserva")}
+                  className="block w-full bg-gold text-dark text-center font-bold text-lg py-4 rounded-full shadow-[0_0_20px_rgba(201,169,110,0.4)] active:scale-95 transition-transform"
                 >
-                  Contactar ahora
-                </button>
+                  Reserva tu fecha
+                </a>
               </motion.div>
             </div>
           </motion.div>

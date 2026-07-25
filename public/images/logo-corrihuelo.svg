@@ -1,18 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 120" width="100%" height="100%">
   <defs>
     <style>
-      .text-primary { font-family: 'Playfair Display', serif; font-size: 64px; font-weight: 700; fill: currentColor; }
-      .text-secondary { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 400; letter-spacing: 6px; fill: currentColor; opacity: 0.7; }
+      .text-primary { font-family: 'Playfair Display', serif; font-size: 64px; font-weight: 700; fill: #FFFFFF; }
+      .text-secondary { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 400; letter-spacing: 6px; fill: #FFFFFF; opacity: 0.8; }
     </style>
   </defs>
   
-  <!-- Icon: Elegant minimal leaf/arch -->
+  <!-- Icon: Elegant minimal leaf/arch in Gold -->
   <g transform="translate(20, 20)">
-    <path d="M40 0 C60 0, 80 20, 80 40 C80 60, 60 80, 40 80 C20 80, 0 60, 0 40 C0 20, 20 0, 40 0 Z" fill="none" stroke="currentColor" stroke-width="2"/>
-    <path d="M40 0 C40 25, 60 40, 80 40 C60 40, 40 55, 40 80 C40 55, 20 40, 0 40 C20 40, 40 25, 40 0 Z" fill="currentColor"/>
+    <path d="M40 0 C60 0, 80 20, 80 40 C80 60, 60 80, 40 80 C20 80, 0 60, 0 40 C0 20, 20 0, 40 0 Z" fill="none" stroke="#C9A96E" stroke-width="2"/>
+    <path d="M40 0 C40 25, 60 40, 80 40 C60 40, 40 55, 40 80 C40 55, 20 40, 0 40 C20 40, 40 25, 40 0 Z" fill="#C9A96E"/>
   </g>
 
-  <!-- Typography -->
+  <!-- Typography in White -->
   <text x="130" y="70" class="text-primary">El Corrihuelo</text>
   <text x="135" y="100" class="text-secondary">CASA VACACIONAL</text>
 </svg>
