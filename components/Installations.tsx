@@ -1,224 +1,106 @@
 "use client";
 
-import { useRef, useCallback } from "react";
-import { motion, useInView, useMotionValue, useTransform } from "framer-motion";
 import Image from "next/image";
-import { Waves, Home, Baby, Flame, Music, Trees } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { Waves, Flame, Tent, Gamepad2, Users, Utensils } from "lucide-react";
 
-const installations = [
+const INSTALLATIONS = [
   {
-    id: "piscina",
-    icon: Waves,
     title: "Piscina Privada",
-    description: "Agua cristalina rodeada de naturaleza. El escenario perfecto para los días de calor en compañía de los tuyos.",
-    image: "/images/terraza-piscina.jpg",
-    color: "var(--green)",
-    bg: "var(--green-pale)",
+    description: "Amplia zona de baño con solárium, perfecta para refrescarse y relajarse bajo el sol.",
+    icon: Waves,
+    image: "/images/detalle-piscina.jpg"
   },
   {
-    id: "salones",
-    icon: Home,
-    title: "Amplios Salones",
-    description: "Salones techados con madera natural, decorados con gusto y equipados para grandes celebraciones. Con espacio de sobra.",
-    image: "/images/salon-decorado.jpg",
-    color: "var(--gold-dark)",
-    bg: "rgba(201,169,110,0.12)",
+    title: "Gran Salón",
+    description: "Espacio diáfano con capacidad para grandes grupos, climatizado y con decoración rústica moderna.",
+    icon: Users,
+    image: "/images/hero-salon.jpg"
   },
   {
-    id: "zona-infantil",
-    icon: Baby,
-    title: "Zona Infantil",
-    description: "Un parque infantil seguro y divertido para que los más pequeños disfruten mientras los adultos celebran sin preocupaciones.",
-    image: "/images/grupo-flamenca.jpg",
-    color: "var(--red-spain)",
-    bg: "rgba(193,48,58,0.08)",
-  },
-  {
-    id: "barbacoa",
+    title: "Zona Barbacoa",
+    description: "Auténtica barbacoa de obra equipada para cocinar al aire libre con la mejor compañía.",
     icon: Flame,
-    title: "Barbacoa & Paella",
-    description: "Área de barbacoa equipada para preparar la mejor gastronomía murciana. Incluye zona techada y mesas en grupo.",
-    image: "/images/paella-grupo.jpg",
-    color: "var(--gold-dark)",
-    bg: "rgba(201,169,110,0.12)",
+    image: "/images/barbacoa-premium.jpg"
   },
   {
-    id: "karaoke",
-    icon: Music,
-    title: "Karaoke y Fiesta",
-    description: "Equipo de sonido profesional, luces y espacio para que la música no pare. Crea recuerdos inolvidables bailando.",
-    image: "/images/baile-noche.jpg",
-    color: "var(--dark)",
-    bg: "rgba(28,26,23,0.1)",
+    title: "Parque Infantil",
+    description: "Área segura y acotada con juegos para que los más pequeños se diviertan sin preocupaciones.",
+    icon: Tent,
+    image: "/images/parque-infantil.jpg"
   },
   {
-    id: "naturaleza",
-    icon: Trees,
-    title: "Entorno Natural",
-    description: "Respirar aire puro entre olivos y pinos. Una finca vallada y privada que te aísla del ruido de la ciudad.",
-    image: "/images/hero-jardin.jpg",
-    color: "var(--green)",
-    bg: "var(--green-pale)",
+    title: "Sala de Juegos",
+    description: "Futbolín, ping pong y diana. El lugar perfecto para el entretenimiento de adultos y niños.",
+    icon: Gamepad2,
+    image: "/images/sala-juegos.jpg"
   },
+  {
+    title: "Zona Gourmet",
+    description: "Cocina completamente equipada e integrada para facilitar el servicio de catering o cocina propia.",
+    icon: Utensils,
+    image: "/images/mesa-gourmet.jpg"
+  }
 ];
-
-function InstallationCard({ item, index }: { item: typeof installations[0], index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-  
-  // Premium 3D Hover
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const rotateX = useTransform(mouseY, [-0.5, 0.5], [4, -4]);
-  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-4, 4]);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
-    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
-  }, [mouseX, mouseY]);
-
-  const handleMouseLeave = useCallback(() => {
-    mouseX.set(0);
-    mouseY.set(0);
-  }, [mouseX, mouseY]);
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 32, filter: "blur(8px)" }}
-      animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
-      transition={{ duration: 0.8, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      style={{ perspective: 1200 }}
-    >
-      <motion.article
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
-        className="group relative h-full flex flex-col rounded-3xl overflow-hidden cursor-pointer"
-        aria-labelledby={`title-${item.id}`}
-      >
-        {/* Glow behind card */}
-        <div 
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-2xl -z-10"
-          style={{ background: item.color }} 
-        />
-
-        <div 
-          className="relative flex-1 flex flex-col h-full bg-white z-10"
-          style={{ 
-            border: "1px solid var(--border-light)",
-            borderRadius: "var(--radius-xl)",
-            boxShadow: "var(--shadow-soft)",
-            transition: "box-shadow 0.4s ease, border-color 0.4s ease"
-          }}
-        >
-          {/* Image header */}
-          <div className="relative h-56 md:h-64 overflow-hidden rounded-t-3xl img-hover-zoom">
-            <Image
-              src={item.image}
-              alt={item.title}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover"
-              loading="lazy"
-            />
-            <div
-              className="absolute inset-0 z-10 opacity-0 group-hover:opacity-100"
-              style={{
-                background: "linear-gradient(to top, rgba(28,26,23,0.4) 0%, transparent 100%)",
-                transition: "opacity 0.4s ease"
-              }}
-            />
-            {/* Hover floating icon overlay */}
-            <div className="absolute top-4 right-4 z-20 opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-              <div 
-                className="w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md"
-                style={{ background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.4)" }}
-              >
-                <item.icon size={18} color="white" />
-              </div>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="p-8 flex flex-col flex-1 transform translate-z-10" style={{ transform: "translateZ(20px)" }}>
-            <div className="flex items-center gap-4 mb-5">
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110"
-                style={{ background: item.bg }}
-              >
-                <item.icon size={22} style={{ color: item.color }} />
-              </div>
-              <h3
-                id={`title-${item.id}`}
-                className="text-xl font-bold font-serif"
-                style={{ color: "var(--dark)", letterSpacing: "-0.01em" }}
-              >
-                {item.title}
-              </h3>
-            </div>
-            <p
-              className="text-[0.95rem] leading-relaxed flex-1"
-              style={{ color: "var(--dark-secondary)", fontFamily: "Inter, sans-serif" }}
-            >
-              {item.description}
-            </p>
-          </div>
-
-          {/* Premium border hover */}
-          <div
-            className="absolute inset-0 rounded-3xl pointer-events-none border-2 border-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"
-            style={{ borderColor: item.color }}
-          />
-        </div>
-      </motion.article>
-    </motion.div>
-  );
-}
 
 export default function Installations() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-10%" });
 
   return (
-    <section
-      id="instalaciones"
-      ref={ref}
-      className="section-padding relative overflow-hidden"
-      style={{ background: "var(--white)" }}
-    >
-      <div className="container-max relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
+    <section id="instalaciones" className="py-24 md:py-32 bg-dark text-white relative" ref={ref}>
+      <div className="container-max mx-auto px-4 md:px-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-20"
+          transition={{ duration: 0.8 }}
+          className="text-center max-w-3xl mx-auto mb-16 md:mb-24"
         >
-          <span className="tag-badge">Instalaciones Premium</span>
-          <div className="divider-gold" />
-          <h2 className="text-section-title font-serif mb-6" style={{ color: "var(--dark)" }}>
-            Todo lo que necesitas para una{" "}
-            <em className="italic" style={{ color: "var(--gold-dark)" }}>
-              fiesta perfecta
-            </em>
+          <span className="text-gold font-bold tracking-[0.2em] text-sm uppercase mb-4 block">
+            Equipamiento Boutique
+          </span>
+          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">
+            Todo lo que necesitas, y mucho más
           </h2>
-          <p
-            className="text-base md:text-lg max-w-2xl mx-auto"
-            style={{ color: "var(--dark-secondary)", fontFamily: "Inter, sans-serif" }}
-          >
-            Nuestros espacios han sido diseñados y equipados pensando en tu máxima comodidad y diversión.
+          <p className="text-lg text-white/70 font-light max-w-2xl mx-auto">
+            Hemos cuidado cada rincón para ofrecerte una experiencia completa, fusionando el encanto rural con las comodidades más exclusivas.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-          {installations.map((item, index) => (
-            <InstallationCard key={item.id} item={item} index={index} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {INSTALLATIONS.map((inst, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: index * 0.1 }}
+              className="group relative h-80 rounded-3xl overflow-hidden card-3d"
+            >
+              {/* Background Image */}
+              <Image 
+                src={inst.image}
+                alt={inst.title}
+                fill
+                className="object-cover transition-transform duration-1000 group-hover:scale-110"
+              />
+              
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-dark/60 group-hover:bg-dark/40 transition-colors duration-500" />
+              
+              {/* Content */}
+              <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                <div className="mb-4 w-12 h-12 rounded-full bg-gold/90 flex items-center justify-center text-dark transform group-hover:-translate-y-2 transition-transform duration-300">
+                  <inst.icon size={24} />
+                </div>
+                <h3 className="font-serif text-2xl font-bold text-white mb-2 transform group-hover:-translate-y-2 transition-transform duration-300 delay-75">
+                  {inst.title}
+                </h3>
+                <p className="text-sm text-white/80 font-light transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">
+                  {inst.description}
+                </p>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>

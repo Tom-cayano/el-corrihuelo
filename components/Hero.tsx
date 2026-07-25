@@ -1,271 +1,113 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { motion } from "framer-motion";
-import { Calendar, Play } from "lucide-react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
-const SLIDES = [
-  { src: "/images/hero-salon.jpg", alt: "Salón principal de El Corrihuelo" },
-  { src: "/images/evento-grupo.jpg", alt: "Celebración flamenca en El Corrihuelo" },
-  { src: "/images/baile-noche.jpg", alt: "Fiesta nocturna en El Corrihuelo" },
+const HERO_IMAGES = [
+  "/images/hero-jardin.jpg", // 1. Jardín
+  "/images/terraza-piscina.jpg", // 2. Piscina
+  "/images/detalle-piscina.jpg", // 3. Terraza (detalle)
+  "/images/hero-salon.jpg", // 4. Salón principal
+  "/images/barbacoa-premium.jpg", // 5. Barbacoa
+  "/images/parque-infantil.jpg", // 6. Parque infantil
+  "/images/sala-juegos.jpg", // 7. Ping Pong / Futbolín / Ocio
+  "/images/noche-piscina.jpg", // 8. Vista nocturna
 ];
 
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const [videoError, setVideoError] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [mouseX, setMouseX] = useState(0);
-  const [mouseY, setMouseY] = useState(0);
-  const containerRef = useRef<HTMLElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Mouse parallax
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    setMouseX(((e.clientX - rect.left) / rect.width - 0.5) * 2);
-    setMouseY(((e.clientY - rect.top) / rect.height - 0.5) * 2);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % HERO_IMAGES.length);
+    }, 5000); // 5 segundos por imagen
+    return () => clearInterval(timer);
   }, []);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    el.addEventListener("mousemove", handleMouseMove);
-    return () => el.removeEventListener("mousemove", handleMouseMove);
-  }, [handleMouseMove]);
-
-  // Video load
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.load();
-    video.play().catch(() => setVideoError(true));
-  }, []);
-
-  // Slideshow fallback (Ken Burns cycle)
-  useEffect(() => {
-    if (videoLoaded && !videoError) return;
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [videoLoaded, videoError]);
-
-  const scrollToNext = () => {
-    const el = document.querySelector("#sobre-nosotros");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const showSlideshow = !videoLoaded || videoError;
 
   return (
-    <section
-      id="inicio"
-      ref={containerRef}
-      className="hero-section relative w-full flex items-center justify-center overflow-hidden"
-      aria-label="El Corrihuelo — Casa de Celebraciones en Murcia"
-    >
-      {/* ── VIDEO BACKGROUND ── */}
+    <section className="relative h-[100svh] w-full overflow-hidden bg-dark">
+      {/* Background Cinematic Carousel */}
       <div className="absolute inset-0 z-0">
-        {!videoError && (
-          <video
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            onCanPlay={() => setVideoLoaded(true)}
-            onError={() => setVideoError(true)}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{
-              opacity: videoLoaded ? 1 : 0,
-              transform: `scale(1.04) translate(${mouseX * -4}px, ${mouseY * -4}px)`,
-              transition: videoLoaded ? "transform 0.15s ease-out, opacity 2s ease" : "opacity 2s ease",
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              opacity: { duration: 1.5, ease: "easeInOut" },
+              scale: { duration: 8, ease: "linear" }, // Slow Ken Burns effect
             }}
-            aria-hidden="true"
-          >
-            <source src="/images/hero-video.mp4" type="video/mp4" />
-          </video>
-        )}
-
-        {/* Ken Burns Slideshow (fallback or while video loads) */}
-        {SLIDES.map((slide, i) => (
-          <div
-            key={slide.src}
             className="absolute inset-0"
-            style={{
-              backgroundImage: `url('${slide.src}')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              opacity: showSlideshow && i === currentSlide ? 1 : (videoLoaded ? 0 : i === 0 ? 1 : 0),
-              animation: showSlideshow && i === currentSlide ? "kenBurns 8s ease-in-out infinite" : "none",
-              transform: `scale(1.04) translate(${mouseX * -4}px, ${mouseY * -4}px)`,
-              transition: "transform 0.15s ease-out, opacity 1.5s ease",
-            }}
-          />
-        ))}
+          >
+            <Image
+              src={HERO_IMAGES[currentIndex]}
+              alt="Instalaciones de El Corrihuelo"
+              fill
+              priority={currentIndex === 0}
+              quality={90}
+              className="object-cover"
+            />
+          </motion.div>
+        </AnimatePresence>
+        
+        {/* Luxury Overlay Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/40 to-dark/90" />
       </div>
 
-      {/* ── OVERLAYS ── */}
-      {/* Multi-layer overlay for depth */}
-      <div className="absolute inset-0 z-10 hero-overlay-premium" />
-      {/* Vignette */}
-      <div className="absolute inset-0 z-10 hero-vignette" />
-      {/* Noise texture */}
-      <div className="absolute inset-0 z-10 hero-noise" />
-      {/* Bottom fade to cream */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 z-10 hero-bottom-fade" />
-      {/* Gold glow accent */}
-      <div className="absolute inset-0 z-10 hero-gold-glow" />
-
-      {/* ── CONTENT ── */}
-      <div className="relative z-20 text-center px-6 w-full max-w-6xl mx-auto py-32 pt-40">
-
-        {/* Location badge */}
+      {/* Content */}
+      <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="inline-flex items-center gap-4 mb-10"
+          transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-4xl mx-auto flex flex-col items-center"
         >
-          <span className="hero-line" />
-          <span className="hero-badge-text">
-            Cabezo de la Plata · Murcia
+          <span className="text-gold font-bold tracking-[0.2em] text-sm md:text-base uppercase mb-4 block">
+            Casa Vacacional y Celebraciones
           </span>
-          <span className="hero-line" />
-        </motion.div>
+          <h1 className="font-serif text-[4.5rem] md:text-[7rem] lg:text-[9rem] leading-[0.9] text-white font-bold mb-6 tracking-tight drop-shadow-2xl">
+            El Corrihuelo
+          </h1>
+          <p className="text-lg md:text-xl text-white/90 font-light max-w-2xl mx-auto mb-10 leading-relaxed font-sans">
+            El lugar perfecto para disfrutar de la naturaleza, celebrar con tu familia y crear recuerdos inolvidables en un entorno exclusivo.
+          </p>
 
-        {/* Main title */}
-        <div className="overflow-hidden mb-4">
-          <motion.h1
-            className="hero-title font-serif"
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: "0%", opacity: 1 }}
-            transition={{ duration: 1.1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            El{" "}
-            <em className="hero-title-em italic">Corrihuelo</em>
-          </motion.h1>
-        </div>
-
-        {/* Subtitle */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-3"
-        >
-          <span className="hero-subtitle">Casa Vacacional y de Celebraciones</span>
-        </motion.div>
-
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 1.05 }}
-          className="hero-tagline"
-        >
-          Naturaleza&nbsp;&nbsp;·&nbsp;&nbsp;Diversión&nbsp;&nbsp;·&nbsp;&nbsp;Momentos Inolvidables
-        </motion.p>
-
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12"
-        >
-          <a
-            href="https://wa.me/34601167585?text=Hola!%20Quiero%20reservar%20El%20Corrihuelo"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-hero-primary group"
-            aria-label="Reservar El Corrihuelo por WhatsApp"
-          >
-            <span className="btn-hero-bg" aria-hidden="true" />
-            <Calendar size={18} className="relative z-10" />
-            <span className="relative z-10">Reservar ahora</span>
-          </a>
-
-          <button
-            onClick={() => {
-              document.querySelector("#galeria")?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="btn-hero-secondary group"
-            aria-label="Ver galería de El Corrihuelo"
-          >
-            <Play size={16} className="opacity-80" />
-            <span>Ver galería</span>
-          </button>
-        </motion.div>
-
-        {/* Info strip */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2, delay: 1.5 }}
-          className="hero-info-strip"
-        >
-          <div className="hero-info-item">
-            <span className="hero-info-icon">✦</span>
-            <span>Desde 200€</span>
-          </div>
-          <span className="hero-info-sep" aria-hidden="true" />
-          <div className="hero-info-item">
-            <span className="hero-info-icon">✦</span>
-            <span>12:00 – 24:00</span>
-          </div>
-          <span className="hero-info-sep hidden sm:block" aria-hidden="true" />
-          <div className="hero-info-item hidden sm:flex">
-            <span className="hero-info-icon">✦</span>
-            <span>Sep – Jun</span>
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto justify-center">
+            <a 
+              href="#reserva" 
+              className="btn-primary"
+            >
+              Reservar ahora
+            </a>
+            <a 
+              href="#descubre" 
+              className="inline-flex items-center justify-center bg-white/10 hover:bg-white/20 text-white backdrop-blur-md border border-white/20 font-bold text-sm tracking-wide transition-all duration-300"
+              style={{ borderRadius: "2rem", padding: "1rem 2.5rem" }}
+            >
+              Descubrir instalaciones
+            </a>
           </div>
         </motion.div>
       </div>
 
-      {/* ── SCROLL INDICATOR ── */}
-      <motion.button
+      {/* Modern Scroll Indicator */}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-        onClick={scrollToNext}
-        className="scroll-trigger absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 cursor-pointer bg-transparent border-0"
-        aria-label="Desplazar hacia abajo para descubrir más"
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
       >
-        <span className="scroll-trigger-label">Descubrir</span>
-        <div className="scroll-trigger-mouse" aria-hidden="true">
-          <div className="scroll-trigger-dot" />
+        <span className="text-[10px] uppercase tracking-[0.2em] text-white/50 font-bold">Scroll</span>
+        <div className="w-[1px] h-12 bg-white/20 overflow-hidden">
+          <motion.div 
+            animate={{ y: ["-100%", "100%"] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+            className="w-full h-1/2 bg-gold"
+          />
         </div>
-      </motion.button>
-
-      {/* ── SLIDE DOTS ── */}
-      {showSlideshow && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-          className="absolute bottom-10 right-8 z-20 flex flex-col gap-2"
-          aria-hidden="true"
-        >
-          {SLIDES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentSlide(i)}
-              className="slide-dot"
-              style={{
-                background: i === currentSlide ? "var(--gold)" : "rgba(255,255,255,0.4)",
-                width: i === currentSlide ? "24px" : "6px",
-                height: "6px",
-                borderRadius: "3px",
-                border: "none",
-                cursor: "pointer",
-                transition: "all 0.4s ease",
-              }}
-            />
-          ))}
-        </motion.div>
-      )}
+      </motion.div>
     </section>
   );
 }
