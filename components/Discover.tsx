@@ -22,9 +22,9 @@ const DISCOVER_DATA = [
     image: "/images/hero-jardin.jpg",
   },
   {
-    title: "Zonas de Ocio",
-    description: "Desde una auténtica barbacoa de obra hasta zonas de juegos equipadas para garantizar la diversión de niños y adultos en todo momento.",
-    image: "/images/barbacoa-premium.jpg",
+    title: "Gastronomía",
+    description: "Espacios pensados para el disfrute culinario. Ya sea contratando un catering profesional o preparando tus propias elaboraciones con todas las comodidades.",
+    image: "/images/mesa-gourmet.jpg",
   }
 ];
 

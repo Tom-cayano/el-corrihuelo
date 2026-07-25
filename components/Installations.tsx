@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Waves, Flame, Tent, Gamepad2, Users, Utensils } from "lucide-react";
+import { Waves, Users, Utensils } from "lucide-react";
 
 const INSTALLATIONS = [
   {
@@ -17,24 +17,6 @@ const INSTALLATIONS = [
     description: "Espacio diáfano con capacidad para grandes grupos, climatizado y con decoración rústica moderna.",
     icon: Users,
     image: "/images/hero-salon.jpg"
-  },
-  {
-    title: "Zona Barbacoa",
-    description: "Auténtica barbacoa de obra equipada para cocinar al aire libre con la mejor compañía.",
-    icon: Flame,
-    image: "/images/barbacoa-premium.jpg"
-  },
-  {
-    title: "Parque Infantil",
-    description: "Área segura y acotada con juegos para que los más pequeños se diviertan sin preocupaciones.",
-    icon: Tent,
-    image: "/images/parque-infantil.jpg"
-  },
-  {
-    title: "Sala de Juegos",
-    description: "Futbolín, ping pong y diana. El lugar perfecto para el entretenimiento de adultos y niños.",
-    icon: Gamepad2,
-    image: "/images/sala-juegos.jpg"
   },
   {
     title: "Zona Gourmet",

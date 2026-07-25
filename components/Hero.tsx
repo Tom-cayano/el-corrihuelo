@@ -5,14 +5,14 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 const HERO_IMAGES = [
-  "/images/hero-jardin.jpg", // 1. Jardín
-  "/images/terraza-piscina.jpg", // 2. Piscina
-  "/images/detalle-piscina.jpg", // 3. Terraza (detalle)
-  "/images/hero-salon.jpg", // 4. Salón principal
-  "/images/barbacoa-premium.jpg", // 5. Barbacoa
-  "/images/parque-infantil.jpg", // 6. Parque infantil
-  "/images/sala-juegos.jpg", // 7. Ping Pong / Futbolín / Ocio
-  "/images/noche-piscina.jpg", // 8. Vista nocturna
+  "/images/hero-jardin.jpg",
+  "/images/terraza-piscina.jpg",
+  "/images/detalle-piscina.jpg",
+  "/images/hero-salon.jpg",
+  "/images/salon-decorado.jpg",
+  "/images/flores-entrada.jpg",
+  "/images/mesa-gourmet.jpg",
+  "/images/mesa-tapas.jpg",
 ];
 
 export default function Hero() {
