@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
@@ -70,20 +71,18 @@ export default function Navbar() {
           <a
             href="#inicio"
             onClick={(e) => scrollToSection(e, "#inicio")}
-            className="relative z-50 flex items-center gap-3 transition-transform hover:scale-105"
+            className="relative z-50 flex items-center gap-3 group"
             aria-label="Ir a Inicio"
           >
-            <div className="w-10 h-10 bg-dark rounded-xl flex items-center justify-center overflow-hidden">
-              <span className="text-gold font-serif font-bold text-xl leading-none pt-1">C</span>
+            <div className={`transition-colors duration-300 w-32 md:w-40 h-10 relative ${scrolled ? "text-dark" : "text-white"}`}>
+              <Image 
+                src="/images/logo-corrihuelo.svg"
+                alt="El Corrihuelo Logo"
+                fill
+                priority
+                className="object-contain object-left group-hover:scale-105 transition-transform duration-300"
+              />
             </div>
-            <span
-              className={`font-serif text-xl md:text-2xl font-bold tracking-tight transition-colors duration-500 ${
-                scrolled ? "text-dark" : "text-white"
-              }`}
-              style={!scrolled ? { textShadow: "0 2px 10px rgba(0,0,0,0.3)" } : {}}
-            >
-              El Corrihuelo
-            </span>
           </a>
 
           {/* DESKTOP MENU */}

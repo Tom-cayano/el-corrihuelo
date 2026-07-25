@@ -1,5 +1,6 @@
 import { MapPin, Phone, Mail } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -16,10 +17,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
           
           {/* Col 1: Brand */}
-          <div className="lg:pr-8">
-            <h3 className="font-serif text-3xl font-bold mb-6 text-white tracking-tight">
-              El Corrihuelo
-            </h3>
+          <div className="col-span-1 lg:col-span-1">
+            <Link href="/" className="inline-block mb-6 relative w-40 h-12">
+              <Image 
+                src="/images/logo-corrihuelo.svg"
+                alt="El Corrihuelo Logo"
+                fill
+                className="object-contain object-left"
+              />
+            </Link>
             <p className="text-sm opacity-70 leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
               Tu casa vacacional y de celebraciones en la naturaleza murciana. 
               El espacio perfecto para crear recuerdos inolvidables con total exclusividad.
