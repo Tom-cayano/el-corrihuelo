@@ -1,325 +1,200 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-
-/* ─── Images: widest, most impressive shots first ─────── */
-const SLIDES = [
-  { src: "/images/hero-jardin.jpg",       alt: "Jardín y exteriores de El Corrihuelo" },
-  { src: "/images/terraza-piscina.jpg",   alt: "Terraza y piscina de El Corrihuelo" },
-  { src: "/images/detalle-piscina.jpg",   alt: "Piscina privada de El Corrihuelo" },
-  { src: "/images/salon-decorado.jpg",    alt: "Salón de celebraciones decorado" },
-  { src: "/images/flores-entrada.jpg",    alt: "Entrada de El Corrihuelo" },
-];
-
-/* Tiny golden laurel SVG ornament (inline so it can't be filtered) */
-function Ornament() {
-  return (
-    <svg
-      width="130" height="20"
-      viewBox="0 0 130 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      style={{ display:"block", margin:"0 auto" }}
-    >
-      {/* left line */}
-      <line x1="0"  y1="10" x2="46" y2="10" stroke="#C9A96E" strokeWidth="0.8"/>
-      {/* left leaf */}
-      <path d="M48 10 C50 6.5,54 5,56 10 C54 15,50 13.5,48 10Z" fill="#C9A96E" opacity=".75"/>
-      {/* centre leaf pair */}
-      <path d="M57 10 C59 5.5,63.5 4,65 10 C63.5 16,59 14.5,57 10Z" fill="#C9A96E"/>
-      <path d="M73 10 C71 5.5,66.5 4,65 10 C66.5 16,71 14.5,73 10Z" fill="#C9A96E"/>
-      {/* right leaf */}
-      <path d="M74 10 C76 6.5,80 5,82 10 C80 15,76 13.5,74 10Z" fill="#C9A96E" opacity=".75"/>
-      {/* right line */}
-      <line x1="84" y1="10" x2="130" y2="10" stroke="#C9A96E" strokeWidth="0.8"/>
-    </svg>
-  );
-}
+import Link from "next/link";
+import { Calendar, ArrowDown } from "lucide-react";
 
 export default function Hero() {
-  const [idx, setIdx] = useState(0);
+  const ref = useRef(null);
+  
+  // Parallax effect on scroll
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 1000], [0, 400]);
+  const opacity = useTransform(scrollY, [0, 600], [1, 0]);
 
-  useEffect(() => {
-    const t = setInterval(() => setIdx(p => (p + 1) % SLIDES.length), 5500);
-    return () => clearInterval(t);
-  }, []);
-
-  const scrollTo = (href: string) => {
-    const el = document.querySelector(href);
-    if (el) {
-      window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 85, behavior:"smooth" });
-    }
+  // Smooth scroll for internal links
+  const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const el = document.querySelector(id);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 82, behavior: "smooth" });
   };
 
   return (
-    <section
-      id="inicio"
+    <section 
+      id="inicio" 
+      ref={ref} 
       style={{
-        position       : "relative",
-        width          : "100%",
-        height         : "100svh",
-        minHeight      : "600px",
-        overflow       : "hidden",
-        background     : "#060606",
-        display        : "flex",
-        alignItems     : "center",
-        justifyContent : "center",
+        position: "relative",
+        height: "100vh",
+        minHeight: "700px",
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#0a0a0a"
       }}
     >
-      {/* ════ BACKGROUND CAROUSEL ════ */}
-      <div style={{ position:"absolute", inset:0, zIndex:0 }}>
-        <AnimatePresence initial={false}>
-          <motion.div
-            key={idx}
-            initial={{ opacity:0, scale:1.06 }}
-            animate={{ opacity:1, scale:1 }}
-            exit={{ opacity:0 }}
-            transition={{
-              opacity : { duration:1.8, ease:"easeInOut" },
-              scale   : { duration:9,   ease:"linear" },
-            }}
-            style={{ position:"absolute", inset:0 }}
-          >
-            <Image
-              src={SLIDES[idx].src}
-              alt={SLIDES[idx].alt}
-              fill
-              priority={idx === 0}
-              quality={93}
-              style={{ objectFit:"cover", objectPosition:"center" }}
-            />
-          </motion.div>
-        </AnimatePresence>
+      {/* Background Image with Parallax */}
+      <motion.div 
+        style={{
+          position: "absolute",
+          inset: -50, // Slight overflow to prevent edges showing on parallax
+          y,
+          opacity: 1 // Base opacity is handled by the wrapper if needed
+        }}
+      >
+        <Image
+          src="/images/terraza-piscina.jpg"
+          alt="Vista exclusiva de El Corrihuelo"
+          fill
+          priority
+          quality={100}
+          style={{ objectFit: "cover", objectPosition: "center" }}
+        />
+        
+        {/* Cinematic Dark Overlays */}
+        <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.50)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 40%, rgba(0,0,0,0.6) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%)" }} />
+      </motion.div>
 
-        {/* ── DARK OVERLAY — exactly rgba(0,0,0,.45) ── */}
-        <div style={{
-          position   : "absolute",
-          inset      : 0,
-          background : "rgba(0,0,0,0.45)",
-          zIndex     : 1,
-        }}/>
-
-        {/* ── gradient bottom for readability ── */}
-        <div style={{
-          position   : "absolute",
-          bottom     : 0, left:0, right:0,
-          height     : "38%",
-          background : "linear-gradient(to bottom, transparent, rgba(0,0,0,0.62))",
-          zIndex     : 2,
-        }}/>
-      </div>
-
-      {/* ════ CONTENT ════ */}
-      <div style={{
-        position : "relative",
-        zIndex   : 10,
-        width    : "100%",
-        padding  : "0 24px",
-        display  : "flex",
-        flexDirection  : "column",
-        alignItems     : "center",
-        justifyContent : "center",
-        textAlign      : "center",
-      }}>
+      {/* Content - Cinematic Reveal */}
+      <motion.div 
+        style={{ 
+          position: "relative", 
+          zIndex: 10, 
+          textAlign: "center",
+          padding: "0 24px",
+          width: "100%",
+          maxWidth: "1000px",
+          marginTop: "40px", // Offset for navbar
+          opacity
+        }}
+      >
         <motion.div
-          initial={{ opacity:0, y:40 }}
-          animate={{ opacity:1, y:0 }}
-          transition={{ duration:1.1, delay:.45, ease:[.22,1,.36,1] }}
-          style={{ maxWidth:"860px", display:"flex", flexDirection:"column", alignItems:"center", gap:0 }}
+          initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
         >
-
-          {/* ── EYEBROW ── */}
-          <p style={{
-            color         : "#FFFFFF",
-            fontWeight    : 500,
-            letterSpacing : "8px",
-            textTransform : "uppercase",
-            fontSize      : "clamp(10px, 1.3vw, 13px)",
-            fontFamily    : "Inter, sans-serif",
-            margin        : "0 0 12px",
-            lineHeight    : 1,
-            /* never inherit any colour from outside */
-            WebkitTextFillColor : "#FFFFFF",
+          <span style={{
+            display: "block", fontFamily: "Inter, sans-serif", fontSize: "11px",
+            fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase",
+            color: "#C9A96E", marginBottom: "24px",
+            textShadow: "0 2px 10px rgba(0,0,0,0.5)"
           }}>
-            Casa Vacacional y Celebraciones
-          </p>
+            La exclusividad de lo privado
+          </span>
+        </motion.div>
 
-          {/* ── ORNAMENT ── */}
-          <div style={{ marginBottom:"16px" }}>
-            <Ornament/>
-          </div>
+        <motion.h1
+          initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+          style={{
+            fontFamily: "Playfair Display, Georgia, serif",
+            fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
+            fontWeight: 400, color: "#fff", lineHeight: 1.05,
+            margin: "0 0 24px",
+            letterSpacing: "-0.01em",
+            textShadow: "0 10px 30px rgba(0,0,0,0.6)"
+          }}
+        >
+          El espacio perfecto para <br/>
+          <em style={{ fontStyle: "italic", color: "#C9A96E", fontWeight: 500 }}>celebrar la vida</em>
+        </motion.h1>
 
-          {/* ── H1 ── */}
-          <h1 style={{
-            color      : "#FFFFFF",
-            fontFamily : "Cormorant Garamond, 'Playfair Display', Georgia, serif",
-            fontSize   : "clamp(4rem, 12vw, 10.5rem)",
-            fontWeight : 700,
-            lineHeight : 0.92,
-            letterSpacing : "-0.02em",
-            margin     : "0 0 22px",
-            textShadow : "0 4px 20px rgba(0,0,0,0.45)",
-            WebkitTextFillColor : "#FFFFFF",
-          }}>
-            El Corrihuelo
-          </h1>
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
+          style={{
+            fontFamily: "Inter, sans-serif", fontSize: "clamp(16px, 2.5vw, 19px)",
+            color: "rgba(255,255,255,0.85)", fontWeight: 300, lineHeight: 1.6,
+            maxWidth: "600px", margin: "0 auto 48px",
+            textShadow: "0 2px 10px rgba(0,0,0,0.5)"
+          }}
+        >
+          Reserva la finca en exclusividad y disfruta de instalaciones de alto nivel para tu próximo evento, rodeado de naturaleza.
+        </motion.p>
 
-          {/* ── SUBTITLE ── */}
-          <p style={{
-            color      : "#FFFFFF",
-            fontFamily : "Inter, sans-serif",
-            fontSize   : "clamp(14px, 1.8vw, 18px)",
-            fontWeight : 300,
-            lineHeight : 1.7,
-            maxWidth   : "540px",
-            margin     : "0 0 40px",
-            textShadow : "0 2px 12px rgba(0,0,0,0.40)",
-            WebkitTextFillColor : "#FFFFFF",
-          }}>
-            El lugar perfecto para disfrutar de la naturaleza, celebrar con tu familia y crear recuerdos inolvidables en un entorno exclusivo.
-          </p>
-
-          {/* ── BUTTONS ── */}
-          <div style={{ display:"flex", gap:"14px", flexWrap:"wrap", justifyContent:"center" }}>
-
-            {/* PRIMARY — gold */}
+        {/* Buttons aligned perfectly */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
+          style={{
+            display: "flex", flexDirection: "column", gap: "16px",
+            alignItems: "center", justifyContent: "center"
+          }}
+        >
+          <style>{`
+            @media (min-width: 640px) {
+              .hero-buttons { flex-direction: row !important; gap: 24px !important; }
+            }
+          `}</style>
+          <div className="hero-buttons" style={{ display: "flex", flexDirection: "column", gap: "16px", width: "100%", justifyContent: "center", maxWidth: "500px", margin: "0 auto" }}>
             <a
               href="#reserva"
-              onClick={(e) => { e.preventDefault(); scrollTo("#reserva"); }}
+              onClick={(e) => scrollTo(e, "#reserva")}
               style={{
-                display       : "inline-block",
-                background    : "#C9A96E",
-                color         : "#111111",
-                fontWeight    : 700,
-                fontSize      : "13px",
-                letterSpacing : "0.1em",
-                textTransform : "uppercase",
-                padding       : "16px 36px",
-                borderRadius  : "9999px",
-                textDecoration: "none",
-                fontFamily    : "Inter, sans-serif",
-                boxShadow     : "0 0 30px rgba(201,169,110,0.45), 0 4px 18px rgba(0,0,0,0.30)",
-                transition    : "all .3s",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "12px",
+                background: "#C9A96E", color: "#111",
+                padding: "18px 40px", borderRadius: "9999px", textDecoration: "none",
+                fontFamily: "Inter, sans-serif", fontSize: "13px", fontWeight: 700,
+                letterSpacing: "0.15em", textTransform: "uppercase",
+                boxShadow: "0 0 30px rgba(201,169,110,0.3)", transition: "all .4s cubic-bezier(0.22, 1, 0.36, 1)",
+                width: "100%"
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background  = "#d8b87b";
-                e.currentTarget.style.transform   = "translateY(-2px)";
-                e.currentTarget.style.boxShadow   = "0 0 42px rgba(201,169,110,0.62), 0 6px 22px rgba(0,0,0,0.35)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background  = "#C9A96E";
-                e.currentTarget.style.transform   = "translateY(0)";
-                e.currentTarget.style.boxShadow   = "0 0 30px rgba(201,169,110,0.45), 0 4px 18px rgba(0,0,0,0.30)";
-              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "#d4b278"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 40px rgba(201,169,110,0.5)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "#C9A96E"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 0 30px rgba(201,169,110,0.3)"; }}
             >
-              Reservar ahora
+              Reservar
             </a>
-
-            {/* SECONDARY — transparent white border */}
+            
             <a
-              href="#discover"
-              onClick={(e) => { e.preventDefault(); scrollTo("#discover"); }}
+              href="#instalaciones"
+              onClick={(e) => scrollTo(e, "#instalaciones")}
               style={{
-                display         : "inline-block",
-                background      : "transparent",
-                color           : "#FFFFFF",
-                fontWeight      : 600,
-                fontSize        : "13px",
-                letterSpacing   : "0.1em",
-                textTransform   : "uppercase",
-                padding         : "16px 36px",
-                borderRadius    : "9999px",
-                textDecoration  : "none",
-                fontFamily      : "Inter, sans-serif",
-                border          : "1.5px solid rgba(255,255,255,0.72)",
-                backdropFilter  : "blur(8px)",
-                transition      : "all .3s",
-                WebkitTextFillColor: "#FFFFFF",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "12px",
+                background: "rgba(255,255,255,0.05)", backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255,255,255,0.2)", color: "#fff",
+                padding: "18px 40px", borderRadius: "9999px", textDecoration: "none",
+                fontFamily: "Inter, sans-serif", fontSize: "13px", fontWeight: 700,
+                letterSpacing: "0.15em", textTransform: "uppercase",
+                transition: "all .4s cubic-bezier(0.22, 1, 0.36, 1)",
+                width: "100%"
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background   = "rgba(255,255,255,0.13)";
-                e.currentTarget.style.borderColor  = "#ffffff";
-                e.currentTarget.style.transform    = "translateY(-2px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background   = "transparent";
-                e.currentTarget.style.borderColor  = "rgba(255,255,255,0.72)";
-                e.currentTarget.style.transform    = "translateY(0)";
-              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              Descubrir instalaciones
+              Ver Instalaciones
             </a>
           </div>
         </motion.div>
-      </div>
-
-      {/* ════ SCROLL INDICATOR ════ */}
-      <motion.div
-        initial={{ opacity:0 }}
-        animate={{ opacity:1 }}
-        transition={{ delay:2, duration:1 }}
-        style={{
-          position      : "absolute",
-          bottom        : "34px",
-          left          : "50%",
-          transform     : "translateX(-50%)",
-          zIndex        : 10,
-          display       : "flex",
-          flexDirection : "column",
-          alignItems    : "center",
-          gap           : "8px",
-        }}
-      >
-        <span style={{
-          color        : "rgba(255,255,255,0.42)",
-          fontSize     : "9px",
-          letterSpacing: ".25em",
-          textTransform: "uppercase",
-          fontFamily   : "Inter, sans-serif",
-          fontWeight   : 600,
-        }}>
-          Scroll
-        </span>
-        <div style={{ width:"1px", height:"46px", background:"rgba(255,255,255,0.14)", overflow:"hidden" }}>
-          <motion.div
-            animate={{ y:["-100%","100%"] }}
-            transition={{ repeat:Infinity, duration:1.5, ease:"linear" }}
-            style={{ width:"100%", height:"50%", background:"#C9A96E" }}
-          />
-        </div>
       </motion.div>
 
-      {/* ════ CAROUSEL DOTS ════ */}
-      <div style={{
-        position : "absolute",
-        bottom   : "34px",
-        right    : "32px",
-        zIndex   : 10,
-        display  : "flex",
-        gap      : "8px",
-        alignItems:"center",
-      }}>
-        {SLIDES.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setIdx(i)}
-            aria-label={`Diapositiva ${i + 1}`}
-            style={{
-              width        : i === idx ? "22px" : "6px",
-              height       : "6px",
-              borderRadius : "9999px",
-              background   : i === idx ? "#C9A96E" : "rgba(255,255,255,0.32)",
-              border       : "none",
-              cursor       : "pointer",
-              padding      : 0,
-              transition   : "all .4s ease",
-            }}
-          />
-        ))}
-      </div>
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2, delay: 1.5 }}
+        style={{
+          position: "absolute", bottom: "40px", left: "50%", transform: "translateX(-50%)",
+          display: "flex", flexDirection: "column", alignItems: "center", gap: "12px",
+          color: "rgba(255,255,255,0.5)", zIndex: 10
+        }}
+      >
+        <span style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", letterSpacing: "0.2em", textTransform: "uppercase" }}>Descubrir</span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ArrowDown size={18} strokeWidth={1.5} />
+        </motion.div>
+      </motion.div>
+
     </section>
   );
 }

@@ -1,205 +1,125 @@
 "use client";
 
-import { MapPin, Phone, Mail } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { Instagram, Facebook, MapPin, Mail, Phone, Clock, ArrowUpRight } from "lucide-react";
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  const scrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <footer style={{ background: "#0E0D0B", color: "#fff", paddingTop: "72px", paddingBottom: "40px", position: "relative", overflow: "hidden" }}>
-      {/* Subtle glow */}
-      <div style={{
-        position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
-        width: "600px", height: "300px", pointerEvents: "none",
-        background: "radial-gradient(ellipse, rgba(201,169,110,0.08) 0%, transparent 70%)",
-      }} />
-
-      <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
-
-        {/* GRID */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(1, 1fr)",
-          gap: "48px",
-        }} className="footer-grid">
+    <footer style={{ background: "#050505", color: "#fff", paddingTop: "100px", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+      <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 24px" }}>
+        
+        <div className="footer-grid" style={{ display: "grid", gap: "64px", marginBottom: "100px" }}>
           <style>{`
-            @media (min-width: 768px) { .footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr !important; gap: 32px !important; } }
+            .footer-grid { grid-template-columns: 1fr; }
+            @media (min-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+            @media (min-width: 1024px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; } }
+            .footer-link { color: rgba(255,255,255,0.6); transition: color .3s; text-decoration: none; font-family: Inter, sans-serif; font-size: 14px; font-weight: 300; display: inline-flex; align-items: center; gap: 8px; }
+            .footer-link:hover { color: #C9A96E; }
           `}</style>
 
-          {/* COL 1: Brand */}
+          {/* Brand Col */}
           <div>
-            {/* Logo */}
-            <div style={{ marginBottom: "20px" }}>
-              <span style={{
-                display: "inline-flex",
-                background: "rgba(255,255,255,0.96)",
-                borderRadius: "8px",
-                padding: "5px 12px",
-              }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/logo-oficial.png"
-                  alt="El Corrihuelo"
-                  style={{ height: "48px", width: "auto", display: "block" }}
-                />
-              </span>
-            </div>
-            <p style={{ fontSize: "14px", lineHeight: 1.7, color: "rgba(255,255,255,0.60)", marginBottom: "24px", maxWidth: "280px" }}>
-              Tu casa vacacional y de celebraciones en la naturaleza murciana. El espacio perfecto para crear recuerdos inolvidables.
+            <Link href="/" onClick={scrollToTop} style={{ display: "inline-block", marginBottom: "32px" }}>
+              <Image 
+                src="/images/logo-oficial.png" 
+                alt="El Corrihuelo" 
+                width={200} height={80} 
+                style={{ height: "48px", width: "auto", mixBlendMode: "screen", filter: "brightness(0.9)" }} 
+              />
+            </Link>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.5)", lineHeight: 1.7, fontWeight: 300, maxWidth: "320px", marginBottom: "32px" }}>
+              El Corrihuelo es más que un espacio de eventos; es un santuario de celebración diseñado para ofrecer la máxima privacidad y exclusividad en un entorno natural incomparable.
             </p>
-            {/* Social */}
-            <div style={{ display: "flex", gap: "12px" }}>
-              {[
-                { href: "https://instagram.com", icon: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z", label: "Instagram" },
-                { href: "https://facebook.com", icon: "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z", label: "Facebook" },
-              ].map(({ href, icon, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  style={{
-                    width: "40px", height: "40px", borderRadius: "50%",
-                    background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.10)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    transition: "all .3s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "#C9A96E";
-                    e.currentTarget.style.borderColor = "#C9A96E";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(255,255,255,0.08)";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.10)";
-                  }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.80)">
-                    <path d={icon} />
-                  </svg>
-                </a>
-              ))}
+            <div style={{ display: "flex", gap: "16px" }}>
+              <a href="https://www.instagram.com/casa_vacacional_ocio_y_turismo" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style={{ width: "40px", height: "40px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", transition: "all .3s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "#C9A96E"; e.currentTarget.style.color = "#111"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.color = "#fff"; }}>
+                <Instagram size={18} />
+              </a>
+              <a href="#" aria-label="Facebook" style={{ width: "40px", height: "40px", borderRadius: "50%", background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", transition: "all .3s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "#C9A96E"; e.currentTarget.style.color = "#111"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; e.currentTarget.style.color = "#fff"; }}>
+                <Facebook size={18} />
+              </a>
             </div>
           </div>
 
-          {/* COL 2: Nav */}
+          {/* Quick Nav */}
           <div>
-            <h4 style={{ color: "#C9A96E", fontSize: "12px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "20px" }}>
-              Navegación
-            </h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "12px" }}>
-              {["Inicio#inicio", "Instalaciones#instalaciones", "Galería#galeria", "Eventos#eventos", "FAQ#faq"].map((item) => {
-                const [label, href] = item.split("#");
-                return (
-                  <li key={label}>
-                    <a href={`#${href}`} style={{ color: "rgba(255,255,255,0.60)", fontSize: "14px", textDecoration: "none", transition: "color .25s" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = "#C9A96E")}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.60)")}
-                    >
-                      {label}
-                    </a>
-                  </li>
-                );
-              })}
+            <h4 style={{ fontFamily: "Playfair Display, serif", fontSize: "1.1rem", fontWeight: 700, color: "#fff", marginBottom: "24px" }}>Navegación</h4>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "16px" }}>
+              <li><Link href="/#inicio" className="footer-link">Inicio</Link></li>
+              <li><Link href="/#instalaciones" className="footer-link">Instalaciones</Link></li>
+              <li><Link href="/#galeria" className="footer-link">Galería</Link></li>
+              <li><Link href="/#ventajas" className="footer-link">Ventajas</Link></li>
+              <li><Link href="/#faq" className="footer-link">Preguntas Frecuentes</Link></li>
             </ul>
           </div>
 
-          {/* COL 3: Contacto */}
+          {/* Info */}
           <div>
-            <h4 style={{ color: "#C9A96E", fontSize: "12px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "20px" }}>
-              Contacto
-            </h4>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "16px" }}>
+            <h4 style={{ fontFamily: "Playfair Display, serif", fontSize: "1.1rem", fontWeight: 700, color: "#fff", marginBottom: "24px" }}>Contacto</h4>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "16px" }}>
               <li>
-                <a href="tel:601167585" style={{ display: "flex", alignItems: "center", gap: "10px", color: "rgba(255,255,255,0.70)", fontSize: "14px", textDecoration: "none" }}>
-                  <Phone size={15} style={{ color: "#C9A96E", flexShrink: 0 }} />
-                  601 167 585
+                <a href="https://wa.me/34601167585" target="_blank" rel="noopener noreferrer" className="footer-link">
+                  <Phone size={16} color="#C9A96E" /> +34 601 16 75 85
                 </a>
               </li>
               <li>
-                <a href="tel:679345177" style={{ display: "flex", alignItems: "center", gap: "10px", color: "rgba(255,255,255,0.70)", fontSize: "14px", textDecoration: "none" }}>
-                  <Phone size={15} style={{ color: "#C9A96E", flexShrink: 0 }} />
-                  679 345 177
+                <a href="mailto:info@elcorrihuelo.es" className="footer-link">
+                  <Mail size={16} color="#C9A96E" /> info@elcorrihuelo.es
                 </a>
               </li>
-              <li>
-                <a href="mailto:info@elcorrihuelo.es" style={{ display: "flex", alignItems: "center", gap: "10px", color: "rgba(255,255,255,0.70)", fontSize: "14px", textDecoration: "none" }}>
-                  <Mail size={15} style={{ color: "#C9A96E", flexShrink: 0 }} />
-                  info@elcorrihuelo.es
-                </a>
-              </li>
-              <li style={{ display: "flex", alignItems: "flex-start", gap: "10px", color: "rgba(255,255,255,0.70)", fontSize: "14px" }}>
-                <MapPin size={15} style={{ color: "#C9A96E", flexShrink: 0, marginTop: "2px" }} />
-                <span>Cabezo de la Plata,<br />Murcia, España</span>
+              <li style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontFamily: "Inter, sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.6)", fontWeight: 300, lineHeight: 1.6 }}>
+                <Clock size={16} color="#C9A96E" style={{ marginTop: "2px", flexShrink: 0 }} />
+                <span>Lunes a Domingo<br/>12:00h - 24:00h</span>
               </li>
             </ul>
           </div>
 
-          {/* COL 4: Horario + CTA */}
+          {/* Address */}
           <div>
-            <h4 style={{ color: "#C9A96E", fontSize: "12px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "20px" }}>
-              Horario
-            </h4>
-            <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.50)", marginBottom: "4px" }}>Lunes a Domingo</p>
-            <p style={{ fontSize: "15px", color: "#fff", fontWeight: 700, marginBottom: "28px" }}>12:00 – 24:00 hrs</p>
-            <a
-              href="#reserva"
-              style={{
-                display: "block",
-                textAlign: "center",
-                background: "#C9A96E",
-                color: "#111",
-                fontWeight: 700,
-                fontSize: "13px",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                padding: "14px 20px",
-                borderRadius: "9999px",
-                textDecoration: "none",
-                transition: "all .3s",
-                boxShadow: "0 0 20px rgba(201,169,110,0.25)",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "#d8b87b"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "#C9A96E"; e.currentTarget.style.transform = "translateY(0)"; }}
-            >
-              Reservar fecha
+            <h4 style={{ fontFamily: "Playfair Display, serif", fontSize: "1.1rem", fontWeight: 700, color: "#fff", marginBottom: "24px" }}>Ubicación</h4>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "8px", fontFamily: "Inter, sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.6)", fontWeight: 300, lineHeight: 1.6, marginBottom: "24px" }}>
+              <MapPin size={16} color="#C9A96E" style={{ marginTop: "2px", flexShrink: 0 }} />
+              <span>Cabezo de la Plata<br/>Murcia, España</span>
+            </div>
+            <a href="https://maps.google.com/?q=Cabezo+de+la+Plata,+Murcia" target="_blank" rel="noopener noreferrer" style={{
+              display: "inline-flex", alignItems: "center", gap: "8px",
+              padding: "12px 20px", borderRadius: "8px",
+              background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)",
+              color: "#fff", fontFamily: "Inter, sans-serif", fontSize: "13px", fontWeight: 500,
+              textDecoration: "none", transition: "all .3s"
+            }} onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.05)"; }}>
+              Ver en Google Maps <ArrowUpRight size={14} />
             </a>
           </div>
+
         </div>
 
-        {/* BOTTOM BAR */}
-        <div style={{
-          marginTop: "56px",
-          paddingTop: "24px",
-          borderTop: "1px solid rgba(255,255,255,0.08)",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "12px",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}>
-          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>
-            © {currentYear} El Corrihuelo. Todos los derechos reservados.
+        {/* Bottom Bar */}
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "32px", paddingBottom: "32px", display: "flex", flexDirection: "column", gap: "16px", alignItems: "center", justifyContent: "space-between" }} className="footer-bottom">
+          <style>{`
+            @media (min-width: 768px) { .footer-bottom { flex-direction: row !important; } }
+          `}</style>
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.4)", margin: 0, fontWeight: 300 }}>
+            © {new Date().getFullYear()} El Corrihuelo. Todos los derechos reservados.
           </p>
-          <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-            {[
-              { label: "Aviso Legal", href: "/aviso-legal" },
-              { label: "Privacidad", href: "/privacidad" },
-              { label: "Cookies", href: "/cookies" },
-            ].map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)", textDecoration: "none", transition: "color .25s" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#C9A96E")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.35)")}
-              >
-                {label}
-              </Link>
-            ))}
+          <div style={{ display: "flex", gap: "24px" }}>
+            <Link href="/aviso-legal" style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.4)", textDecoration: "none", transition: "color .3s" }} onMouseEnter={(e) => e.currentTarget.style.color = "#fff"} onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.4)"}>
+              Aviso Legal
+            </Link>
+            <Link href="/privacidad" style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.4)", textDecoration: "none", transition: "color .3s" }} onMouseEnter={(e) => e.currentTarget.style.color = "#fff"} onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.4)"}>
+              Privacidad
+            </Link>
+            <Link href="/cookies" style={{ fontFamily: "Inter, sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.4)", textDecoration: "none", transition: "color .3s" }} onMouseEnter={(e) => e.currentTarget.style.color = "#fff"} onMouseLeave={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.4)"}>
+              Cookies
+            </Link>
           </div>
         </div>
+
       </div>
     </footer>
   );
