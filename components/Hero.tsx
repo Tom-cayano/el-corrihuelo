@@ -124,22 +124,33 @@ export default function Hero() {
             alignItems: "center",
           }}
         >
-          {/* EYEBROW — CASA VACACIONAL Y CELEBRACIONES */}
+          {/* EYEBROW */}
           <span
             style={{
               color: "#FFFFFF",
               fontWeight: 500,
               letterSpacing: "8px",
               textTransform: "uppercase",
-              fontSize: "clamp(11px, 1.5vw, 14px)",
+              fontSize: "clamp(10px, 1.4vw, 13px)",
               fontFamily: "Inter, sans-serif",
-              marginBottom: "20px",
+              marginBottom: "12px",
               display: "block",
               opacity: 1,
             }}
           >
             Casa Vacacional y Celebraciones
           </span>
+
+          {/* DECORATIVE ORNAMENT */}
+          <div style={{ marginBottom: "18px", opacity: 0.9 }}>
+            <svg width="120" height="22" viewBox="0 0 120 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="0" y1="11" x2="42" y2="11" stroke="#C9A96E" strokeWidth="0.8" />
+              <path d="M52 11 C54 7, 58 5, 60 11 C62 5, 66 7, 68 11 C66 15, 62 17, 60 11 C58 17, 54 15, 52 11Z" fill="#C9A96E"/>
+              <path d="M44 11 C45.5 8.5, 48 7.5, 50 11 C48 14.5, 45.5 13.5, 44 11Z" fill="#C9A96E" opacity="0.7"/>
+              <path d="M70 11 C71.5 8.5, 74 7.5, 76 11 C74 14.5, 71.5 13.5, 70 11Z" fill="#C9A96E" opacity="0.7"/>
+              <line x1="78" y1="11" x2="120" y2="11" stroke="#C9A96E" strokeWidth="0.8" />
+            </svg>
+          </div>
 
           {/* TITLE — EL CORRIHUELO */}
           <h1
