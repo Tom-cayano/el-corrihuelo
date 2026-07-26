@@ -63,7 +63,7 @@ export default function Events() {
                 className="group relative bg-white rounded-3xl overflow-hidden card-3d flex flex-col h-full"
                 style={{ border: "1px solid var(--border-light)" }}
               >
-                <div className="relative h-64 md:h-80 w-full overflow-hidden">
+                <div className="relative w-full overflow-hidden" style={{ height: "clamp(200px, 55vw, 320px)" }}>
                   <Image
                     src={event.image}
                     alt={event.title}
@@ -85,7 +85,16 @@ export default function Events() {
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center w-full py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-full transition-colors gap-2"
+                    className="inline-flex items-center justify-center w-full py-4 text-dark font-bold rounded-full transition-all gap-2"
+                    style={{
+                      background: "#C9A96E",
+                      fontSize: "14px",
+                      letterSpacing: "0.05em",
+                      fontFamily: "Inter, sans-serif",
+                      boxShadow: "0 0 20px rgba(201,169,110,0.3)",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "#d8b87b"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = "#C9A96E"; e.currentTarget.style.transform = "translateY(0)"; }}
                   >
                     <PhoneCall size={18} />
                     Consultar disponibilidad

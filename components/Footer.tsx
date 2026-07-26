@@ -1,3 +1,5 @@
+"use client";
+
 import { MapPin, Phone, Mail } from "lucide-react";
 import Link from "next/link";
 
@@ -5,107 +7,197 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-dark text-white pt-24 pb-12 relative overflow-hidden">
-      {/* Decorative gradient overlay */}
-      <div 
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none opacity-20"
-        style={{ background: "radial-gradient(circle, var(--gold-dark) 0%, transparent 70%)", transform: "translate(-50%, -50%)" }}
-      />
-      
-      <div className="container-max relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
-          
-          {/* Col 1: Brand */}
-          <div className="col-span-1 lg:col-span-1">
-            <Link href="/" className="inline-block mb-6 relative w-40 h-12">
-              <img 
-                src="/images/logo-corrihuelo.svg"
-                alt="El Corrihuelo Logo"
-                className="w-full h-full object-contain object-left"
-              />
-            </Link>
-            <p className="text-sm opacity-70 leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>
-              Tu casa vacacional y de celebraciones en la naturaleza murciana. 
-              El espacio perfecto para crear recuerdos inolvidables con total exclusividad.
+    <footer style={{ background: "#0E0D0B", color: "#fff", paddingTop: "72px", paddingBottom: "40px", position: "relative", overflow: "hidden" }}>
+      {/* Subtle glow */}
+      <div style={{
+        position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+        width: "600px", height: "300px", pointerEvents: "none",
+        background: "radial-gradient(ellipse, rgba(201,169,110,0.08) 0%, transparent 70%)",
+      }} />
+
+      <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
+
+        {/* GRID */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(1, 1fr)",
+          gap: "48px",
+        }} className="footer-grid">
+          <style>{`
+            @media (min-width: 768px) { .footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr !important; gap: 32px !important; } }
+          `}</style>
+
+          {/* COL 1: Brand */}
+          <div>
+            {/* Logo */}
+            <div style={{ marginBottom: "20px" }}>
+              <span style={{
+                display: "inline-flex",
+                background: "rgba(255,255,255,0.96)",
+                borderRadius: "8px",
+                padding: "5px 12px",
+              }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/logo-oficial.png"
+                  alt="El Corrihuelo"
+                  style={{ height: "48px", width: "auto", display: "block" }}
+                />
+              </span>
+            </div>
+            <p style={{ fontSize: "14px", lineHeight: 1.7, color: "rgba(255,255,255,0.60)", marginBottom: "24px", maxWidth: "280px" }}>
+              Tu casa vacacional y de celebraciones en la naturaleza murciana. El espacio perfecto para crear recuerdos inolvidables.
             </p>
-            <div className="flex items-center gap-4">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-gold hover:text-dark transition-colors duration-300">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-              </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-gold hover:text-dark transition-colors duration-300">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-              </a>
+            {/* Social */}
+            <div style={{ display: "flex", gap: "12px" }}>
+              {[
+                { href: "https://instagram.com", icon: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z", label: "Instagram" },
+                { href: "https://facebook.com", icon: "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z", label: "Facebook" },
+              ].map(({ href, icon, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  style={{
+                    width: "40px", height: "40px", borderRadius: "50%",
+                    background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.10)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    transition: "all .3s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "#C9A96E";
+                    e.currentTarget.style.borderColor = "#C9A96E";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.10)";
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.80)">
+                    <path d={icon} />
+                  </svg>
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Col 2: Enlaces Rápidos */}
+          {/* COL 2: Nav */}
           <div>
-            <h4 className="font-bold text-lg mb-6 text-gold">Navegación</h4>
-            <ul className="space-y-4" style={{ fontFamily: "Inter, sans-serif" }}>
-              <li><a href="#inicio" className="text-sm opacity-70 hover:opacity-100 hover:text-gold transition-colors">Inicio</a></li>
-              <li><a href="#instalaciones" className="text-sm opacity-70 hover:opacity-100 hover:text-gold transition-colors">Instalaciones</a></li>
-              <li><a href="#galeria" className="text-sm opacity-70 hover:opacity-100 hover:text-gold transition-colors">Galería</a></li>
-              <li><a href="#eventos" className="text-sm opacity-70 hover:opacity-100 hover:text-gold transition-colors">Eventos</a></li>
-              <li><a href="#faq" className="text-sm opacity-70 hover:opacity-100 hover:text-gold transition-colors">Preguntas Frecuentes</a></li>
+            <h4 style={{ color: "#C9A96E", fontSize: "12px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "20px" }}>
+              Navegación
+            </h4>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "12px" }}>
+              {["Inicio#inicio", "Instalaciones#instalaciones", "Galería#galeria", "Eventos#eventos", "FAQ#faq"].map((item) => {
+                const [label, href] = item.split("#");
+                return (
+                  <li key={label}>
+                    <a href={`#${href}`} style={{ color: "rgba(255,255,255,0.60)", fontSize: "14px", textDecoration: "none", transition: "color .25s" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = "#C9A96E")}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.60)")}
+                    >
+                      {label}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
-          {/* Col 3: Contacto */}
+          {/* COL 3: Contacto */}
           <div>
-            <h4 className="font-bold text-lg mb-6 text-gold">Contacto</h4>
-            <ul className="space-y-5" style={{ fontFamily: "Inter, sans-serif" }}>
+            <h4 style={{ color: "#C9A96E", fontSize: "12px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "20px" }}>
+              Contacto
+            </h4>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "16px" }}>
               <li>
-                <a href="tel:601167585" className="group flex items-start gap-3">
-                  <Phone size={18} className="mt-0.5 text-gold-light group-hover:text-gold transition-colors" />
-                  <div>
-                    <span className="block text-sm opacity-90 group-hover:text-gold transition-colors">601 167 585</span>
-                    <span className="block text-sm opacity-90 group-hover:text-gold transition-colors">679 345 177</span>
-                  </div>
+                <a href="tel:601167585" style={{ display: "flex", alignItems: "center", gap: "10px", color: "rgba(255,255,255,0.70)", fontSize: "14px", textDecoration: "none" }}>
+                  <Phone size={15} style={{ color: "#C9A96E", flexShrink: 0 }} />
+                  601 167 585
                 </a>
               </li>
               <li>
-                <a href="mailto:info@elcorrihuelo.es" className="group flex items-center gap-3">
-                  <Mail size={18} className="text-gold-light group-hover:text-gold transition-colors" />
-                  <span className="text-sm opacity-90 group-hover:text-gold transition-colors">info@elcorrihuelo.es</span>
+                <a href="tel:679345177" style={{ display: "flex", alignItems: "center", gap: "10px", color: "rgba(255,255,255,0.70)", fontSize: "14px", textDecoration: "none" }}>
+                  <Phone size={15} style={{ color: "#C9A96E", flexShrink: 0 }} />
+                  679 345 177
                 </a>
               </li>
               <li>
-                <div className="flex items-start gap-3">
-                  <MapPin size={18} className="mt-0.5 text-gold-light" />
-                  <span className="text-sm opacity-90">Cabezo de la Plata,<br />Murcia, España</span>
-                </div>
+                <a href="mailto:info@elcorrihuelo.es" style={{ display: "flex", alignItems: "center", gap: "10px", color: "rgba(255,255,255,0.70)", fontSize: "14px", textDecoration: "none" }}>
+                  <Mail size={15} style={{ color: "#C9A96E", flexShrink: 0 }} />
+                  info@elcorrihuelo.es
+                </a>
+              </li>
+              <li style={{ display: "flex", alignItems: "flex-start", gap: "10px", color: "rgba(255,255,255,0.70)", fontSize: "14px" }}>
+                <MapPin size={15} style={{ color: "#C9A96E", flexShrink: 0, marginTop: "2px" }} />
+                <span>Cabezo de la Plata,<br />Murcia, España</span>
               </li>
             </ul>
           </div>
 
-          {/* Col 4: Horario y CTA */}
+          {/* COL 4: Horario + CTA */}
           <div>
-            <h4 className="font-bold text-lg mb-6 text-gold">Horario</h4>
-            <p className="text-sm opacity-70 mb-2" style={{ fontFamily: "Inter, sans-serif" }}>
-              Lunes a Domingo
-            </p>
-            <p className="text-sm opacity-100 font-bold mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
-              12:00 – 24:00 hrs
-            </p>
-            <a 
+            <h4 style={{ color: "#C9A96E", fontSize: "12px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "20px" }}>
+              Horario
+            </h4>
+            <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.50)", marginBottom: "4px" }}>Lunes a Domingo</p>
+            <p style={{ fontSize: "15px", color: "#fff", fontWeight: 700, marginBottom: "28px" }}>12:00 – 24:00 hrs</p>
+            <a
               href="#reserva"
-              className="inline-flex items-center justify-center w-full py-3 px-6 bg-gold text-dark font-bold text-sm rounded-full transition-transform hover:scale-105"
+              style={{
+                display: "block",
+                textAlign: "center",
+                background: "#C9A96E",
+                color: "#111",
+                fontWeight: 700,
+                fontSize: "13px",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                padding: "14px 20px",
+                borderRadius: "9999px",
+                textDecoration: "none",
+                transition: "all .3s",
+                boxShadow: "0 0 20px rgba(201,169,110,0.25)",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "#d8b87b"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "#C9A96E"; e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              Reservar Fecha
+              Reservar fecha
             </a>
           </div>
-
         </div>
 
-        {/* Bottom Bar: Legal */}
-        <div className="pt-8 mt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs opacity-50" style={{ fontFamily: "Inter, sans-serif" }}>
-            &copy; {currentYear} El Corrihuelo. Todos los derechos reservados.
+        {/* BOTTOM BAR */}
+        <div style={{
+          marginTop: "56px",
+          paddingTop: "24px",
+          borderTop: "1px solid rgba(255,255,255,0.08)",
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "12px",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}>
+          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>
+            © {currentYear} El Corrihuelo. Todos los derechos reservados.
           </p>
-          <div className="flex items-center gap-4 md:gap-6 text-xs opacity-50" style={{ fontFamily: "Inter, sans-serif" }}>
-            <Link href="/aviso-legal" className="hover:text-gold hover:opacity-100 transition-colors">Aviso Legal</Link>
-            <Link href="/privacidad" className="hover:text-gold hover:opacity-100 transition-colors">Política de Privacidad</Link>
-            <Link href="/cookies" className="hover:text-gold hover:opacity-100 transition-colors">Política de Cookies</Link>
+          <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+            {[
+              { label: "Aviso Legal", href: "/aviso-legal" },
+              { label: "Privacidad", href: "/privacidad" },
+              { label: "Cookies", href: "/cookies" },
+            ].map(({ label, href }) => (
+              <Link
+                key={label}
+                href={href}
+                style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)", textDecoration: "none", transition: "color .25s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#C9A96E")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.35)")}
+              >
+                {label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

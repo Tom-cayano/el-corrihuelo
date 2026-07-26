@@ -57,28 +57,29 @@ export default function Installations() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: index * 0.1 }}
-              className="group relative h-80 rounded-3xl overflow-hidden card-3d"
+              className="group relative overflow-hidden card-3d"
+              style={{ borderRadius: "24px", minHeight: "340px" }}
             >
               {/* Background Image */}
               <Image 
                 src={inst.image}
                 alt={inst.title}
                 fill
-                className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                className="object-cover transition-transform duration-1000 group-hover:scale-105"
               />
               
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-dark/60 group-hover:bg-dark/40 transition-colors duration-500" />
+              {/* Overlay — always visible, more contrast */}
+              <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.30) 55%, transparent 100%)" }} />
               
-              {/* Content */}
-              <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                <div className="mb-4 w-12 h-12 rounded-full bg-gold/90 flex items-center justify-center text-dark transform group-hover:-translate-y-2 transition-transform duration-300">
-                  <inst.icon size={24} />
+              {/* Content — always visible on mobile */}
+              <div className="absolute inset-0 p-7 flex flex-col justify-end">
+                <div style={{ width:"44px", height:"44px", borderRadius:"50%", background:"rgba(201,169,110,0.92)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"12px" }}>
+                  <inst.icon size={22} color="#111" />
                 </div>
-                <h3 className="font-serif text-2xl font-bold text-white mb-2 transform group-hover:-translate-y-2 transition-transform duration-300 delay-75">
+                <h3 style={{ fontFamily:"Playfair Display, serif", fontSize:"1.4rem", fontWeight:700, color:"#fff", marginBottom:"8px", textShadow:"0 2px 8px rgba(0,0,0,0.4)" }}>
                   {inst.title}
                 </h3>
-                <p className="text-sm text-white/80 font-light transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">
+                <p style={{ fontSize:"14px", color:"rgba(255,255,255,0.85)", fontWeight:300, lineHeight:1.6, fontFamily:"Inter, sans-serif" }}>
                   {inst.description}
                 </p>
               </div>

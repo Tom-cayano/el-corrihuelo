@@ -117,9 +117,9 @@ export default function Navbar() {
               display         : "inline-flex",
               alignItems      : "center",
               background      : "rgba(255,255,255,0.95)",
-              borderRadius    : "10px",
-              padding         : "5px 12px",
-              boxShadow       : "0 2px 20px rgba(0,0,0,0.30)",
+              borderRadius    : "8px",
+              padding         : "4px 8px",
+              boxShadow       : "0 2px 16px rgba(0,0,0,0.28)",
               transition      : "all .4s",
             }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -127,7 +127,7 @@ export default function Navbar() {
                 src="/images/logo-oficial.png"
                 alt="El Corrihuelo — Casa Vacacional y Celebraciones"
                 style={{
-                  height         : scrolled ? "52px" : "64px",
+                  height         : scrolled ? "42px" : "52px",
                   width          : "auto",
                   display        : "block",
                   objectFit      : "contain",
