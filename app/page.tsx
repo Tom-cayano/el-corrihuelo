@@ -1,6 +1,5 @@
 import Hero from "@/components/Hero";
-import Discover from "@/components/Discover";
-import Installations from "@/components/Installations";
+import InstallationsGrid from "@/components/InstallationsGrid";
 import Moments from "@/components/Moments";
 import Events from "@/components/Events";
 import Features from "@/components/Features";
@@ -18,47 +17,44 @@ export default function Home() {
   return (
     <main>
       <Navbar />
-      
-      {/* 1. Impacto visual del espacio puro */}
+
+      {/* 1. Impacto visual — Hero full-screen */}
       <Hero />
-      
-      {/* 2. El Espacio a gran escala */}
-      <Discover />
-      
-      {/* 3. Detalles de las instalaciones (Boutique) */}
-      <Installations />
-      
-      {/* 4. Emociones y personas (Masonry grid) */}
+
+      {/* 2. Nuestros espacios — compact card grid linking to detail pages */}
+      <InstallationsGrid />
+
+      {/* 3. Emociones y personas */}
       <Moments />
-      
-      {/* 5. Imaginando la celebración (Cards a WhatsApp) */}
+
+      {/* 4. Imaginando la celebración */}
       <Events />
-      
-      {/* 6. Lo que incluye (Valor racional) */}
+
+      {/* 5. Lo que incluye */}
       <Includes />
-      
-      {/* 7. Galería inmersiva completa */}
+
+      {/* 6. Galería inmersiva */}
       <Gallery />
-      
-      {/* 8. Prueba Social */}
+
+      {/* 7. Prueba Social */}
       <Testimonials />
-      
-      {/* 9. Confianza (Trust badges) */}
+
+      {/* 8. Confianza */}
       <Features />
-      
-      {/* 10. Ubicación logística */}
+
+      {/* 9. Ubicación */}
       <Location />
-      
-      {/* 11. Dudas resueltas (Objeciones) */}
+
+      {/* 10. FAQ */}
       <FAQ />
-      
-      {/* 12. Cierre de Venta (Calendario y Form) */}
+
+      {/* 11. Reserva */}
       <Booking />
-      
-      {/* 13. Última llamada */}
+
+      {/* 12. CTA Final */}
       <CTAFinal />
-      
-      {/* 14. Información y legal */}
+
+      {/* 13. Footer */}
       <Footer />
     </main>
   );
