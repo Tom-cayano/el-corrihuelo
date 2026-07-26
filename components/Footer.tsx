@@ -1,6 +1,5 @@
 import { MapPin, Phone, Mail } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -19,11 +18,10 @@ export default function Footer() {
           {/* Col 1: Brand */}
           <div className="col-span-1 lg:col-span-1">
             <Link href="/" className="inline-block mb-6 relative w-40 h-12">
-              <Image 
+              <img 
                 src="/images/logo-corrihuelo.svg"
                 alt="El Corrihuelo Logo"
-                fill
-                className="object-contain object-left"
+                className="w-full h-full object-contain object-left"
               />
             </Link>
             <p className="text-sm opacity-70 leading-relaxed mb-8" style={{ fontFamily: "Inter, sans-serif" }}>

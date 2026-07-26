@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: `${SITE_URL}/images/hero-salon.jpg`,
+        url: `${SITE_URL}/images/terraza-piscina.jpg`,
         width: 1600,
         height: 900,
         alt: "El Corrihuelo — Casa de Celebraciones en Cabezo de la Plata, Murcia",

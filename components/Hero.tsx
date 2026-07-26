@@ -5,8 +5,8 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 const HERO_IMAGES = [
-  "/images/hero-jardin.jpg",
   "/images/terraza-piscina.jpg",
+  "/images/hero-jardin.jpg",
   "/images/detalle-piscina.jpg",
   "/images/hero-salon.jpg",
   "/images/salon-decorado.jpg",

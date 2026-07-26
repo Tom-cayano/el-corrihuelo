@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
@@ -77,12 +76,10 @@ export default function Navbar() {
               aria-label="Ir a Inicio"
             >
               <div className="relative w-48 h-12 transition-transform duration-300 active:scale-95">
-                <Image 
+                <img 
                   src="/images/logo-corrihuelo.svg"
                   alt="El Corrihuelo Logo"
-                  fill
-                  priority
-                  className="object-contain object-center"
+                  className="w-full h-full object-contain object-center"
                 />
               </div>
             </a>
@@ -101,12 +98,10 @@ export default function Navbar() {
               aria-label="Ir a Inicio"
             >
               <div className={`transition-all duration-500 relative ${scrolled ? "w-44 h-11" : "w-56 h-14"}`}>
-                <Image 
+                <img 
                   src="/images/logo-corrihuelo.svg"
                   alt="El Corrihuelo Logo"
-                  fill
-                  priority
-                  className="object-contain object-left group-hover:opacity-80 transition-opacity duration-300"
+                  className="w-full h-full object-contain object-left group-hover:opacity-80 transition-opacity duration-300"
                 />
               </div>
             </a>
