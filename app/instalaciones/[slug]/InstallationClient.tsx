@@ -53,7 +53,7 @@ export default function InstallationPageClient({ item }: { item: Installation })
               fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
               color: "#C9A96E", marginBottom: "10px",
             }}>
-              {item.icon} Instalaciones
+              Instalaciones
             </span>
             <h1 style={{
               fontFamily: "Playfair Display, Georgia, serif",
@@ -94,7 +94,7 @@ export default function InstallationPageClient({ item }: { item: Installation })
               display: "flex", flexDirection: "column", gap: "12px",
               alignSelf: "flex-start",
             }}>
-              <div style={{ fontSize: "32px" }}>{item.icon}</div>
+              <div style={{ color: "#C9A96E", display: "flex" }}><Users size={28} strokeWidth={1.5} /></div>
               <h3 style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "#C9A96E", margin: 0 }}>
                 Capacidad
               </h3>
