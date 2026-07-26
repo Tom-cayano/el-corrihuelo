@@ -4,265 +4,250 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
-const HERO_IMAGES = [
-  "/images/terraza-piscina.jpg",
-  "/images/hero-jardin.jpg",
-  "/images/detalle-piscina.jpg",
-  "/images/hero-salon.jpg",
-  "/images/salon-decorado.jpg",
-  "/images/flores-entrada.jpg",
+/* ─── Images: widest, most impressive shots first ─────── */
+const SLIDES = [
+  { src: "/images/hero-jardin.jpg",       alt: "Jardín y exteriores de El Corrihuelo" },
+  { src: "/images/terraza-piscina.jpg",   alt: "Terraza y piscina de El Corrihuelo" },
+  { src: "/images/detalle-piscina.jpg",   alt: "Piscina privada de El Corrihuelo" },
+  { src: "/images/salon-decorado.jpg",    alt: "Salón de celebraciones decorado" },
+  { src: "/images/flores-entrada.jpg",    alt: "Entrada de El Corrihuelo" },
 ];
 
-const scrollToSection = (href: string) => {
-  if (href === "#reserva") {
-    const el = document.querySelector(href);
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.pageYOffset - 90;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-  } else {
-    const el = document.querySelector(href);
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.pageYOffset - 90;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-  }
-};
+/* Tiny golden laurel SVG ornament (inline so it can't be filtered) */
+function Ornament() {
+  return (
+    <svg
+      width="130" height="20"
+      viewBox="0 0 130 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      style={{ display:"block", margin:"0 auto" }}
+    >
+      {/* left line */}
+      <line x1="0"  y1="10" x2="46" y2="10" stroke="#C9A96E" strokeWidth="0.8"/>
+      {/* left leaf */}
+      <path d="M48 10 C50 6.5,54 5,56 10 C54 15,50 13.5,48 10Z" fill="#C9A96E" opacity=".75"/>
+      {/* centre leaf pair */}
+      <path d="M57 10 C59 5.5,63.5 4,65 10 C63.5 16,59 14.5,57 10Z" fill="#C9A96E"/>
+      <path d="M73 10 C71 5.5,66.5 4,65 10 C66.5 16,71 14.5,73 10Z" fill="#C9A96E"/>
+      {/* right leaf */}
+      <path d="M74 10 C76 6.5,80 5,82 10 C80 15,76 13.5,74 10Z" fill="#C9A96E" opacity=".75"/>
+      {/* right line */}
+      <line x1="84" y1="10" x2="130" y2="10" stroke="#C9A96E" strokeWidth="0.8"/>
+    </svg>
+  );
+}
 
 export default function Hero() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [idx, setIdx] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % HERO_IMAGES.length);
-    }, 5500);
-    return () => clearInterval(timer);
+    const t = setInterval(() => setIdx(p => (p + 1) % SLIDES.length), 5500);
+    return () => clearInterval(t);
   }, []);
+
+  const scrollTo = (href: string) => {
+    const el = document.querySelector(href);
+    if (el) {
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 85, behavior:"smooth" });
+    }
+  };
 
   return (
     <section
       id="inicio"
       style={{
-        position: "relative",
-        height: "100svh",
-        width: "100%",
-        overflow: "hidden",
-        backgroundColor: "#080808",
+        position       : "relative",
+        width          : "100%",
+        height         : "100svh",
+        minHeight      : "600px",
+        overflow       : "hidden",
+        background     : "#060606",
+        display        : "flex",
+        alignItems     : "center",
+        justifyContent : "center",
       }}
     >
-      {/* ── BACKGROUND CAROUSEL ── */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+      {/* ════ BACKGROUND CAROUSEL ════ */}
+      <div style={{ position:"absolute", inset:0, zIndex:0 }}>
         <AnimatePresence initial={false}>
           <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0, scale: 1.06 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
+            key={idx}
+            initial={{ opacity:0, scale:1.06 }}
+            animate={{ opacity:1, scale:1 }}
+            exit={{ opacity:0 }}
             transition={{
-              opacity: { duration: 1.8, ease: "easeInOut" },
-              scale: { duration: 9, ease: "linear" },
+              opacity : { duration:1.8, ease:"easeInOut" },
+              scale   : { duration:9,   ease:"linear" },
             }}
-            style={{ position: "absolute", inset: 0 }}
+            style={{ position:"absolute", inset:0 }}
           >
             <Image
-              src={HERO_IMAGES[currentIndex]}
-              alt="El Corrihuelo — Instalaciones"
+              src={SLIDES[idx].src}
+              alt={SLIDES[idx].alt}
               fill
-              priority={currentIndex === 0}
-              quality={92}
-              style={{ objectFit: "cover", objectPosition: "center" }}
+              priority={idx === 0}
+              quality={93}
+              style={{ objectFit:"cover", objectPosition:"center" }}
             />
           </motion.div>
         </AnimatePresence>
 
-        {/* ── DARK OVERLAY exactamente rgba(0,0,0,.45) ── */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "rgba(0,0,0,0.45)",
-            zIndex: 1,
-          }}
-        />
+        {/* ── DARK OVERLAY — exactly rgba(0,0,0,.45) ── */}
+        <div style={{
+          position   : "absolute",
+          inset      : 0,
+          background : "rgba(0,0,0,0.45)",
+          zIndex     : 1,
+        }}/>
 
-        {/* ── GRADIENT BOTTOM (para legibilidad) ── */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "40%",
-            background: "linear-gradient(to bottom, transparent, rgba(0,0,0,0.65))",
-            zIndex: 2,
-          }}
-        />
+        {/* ── gradient bottom for readability ── */}
+        <div style={{
+          position   : "absolute",
+          bottom     : 0, left:0, right:0,
+          height     : "38%",
+          background : "linear-gradient(to bottom, transparent, rgba(0,0,0,0.62))",
+          zIndex     : 2,
+        }}/>
       </div>
 
-      {/* ── CONTENT ── */}
-      <div
-        style={{
-          position: "relative",
-          zIndex: 10,
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          padding: "0 24px",
-        }}
-      >
+      {/* ════ CONTENT ════ */}
+      <div style={{
+        position : "relative",
+        zIndex   : 10,
+        width    : "100%",
+        padding  : "0 24px",
+        display  : "flex",
+        flexDirection  : "column",
+        alignItems     : "center",
+        justifyContent : "center",
+        textAlign      : "center",
+      }}>
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            maxWidth: "860px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
+          initial={{ opacity:0, y:40 }}
+          animate={{ opacity:1, y:0 }}
+          transition={{ duration:1.1, delay:.45, ease:[.22,1,.36,1] }}
+          style={{ maxWidth:"860px", display:"flex", flexDirection:"column", alignItems:"center", gap:0 }}
         >
-          {/* EYEBROW */}
-          <span
-            style={{
-              color: "#FFFFFF",
-              fontWeight: 500,
-              letterSpacing: "8px",
-              textTransform: "uppercase",
-              fontSize: "clamp(10px, 1.4vw, 13px)",
-              fontFamily: "Inter, sans-serif",
-              marginBottom: "12px",
-              display: "block",
-              opacity: 1,
-            }}
-          >
-            Casa Vacacional y Celebraciones
-          </span>
 
-          {/* DECORATIVE ORNAMENT */}
-          <div style={{ marginBottom: "18px", opacity: 0.9 }}>
-            <svg width="120" height="22" viewBox="0 0 120 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <line x1="0" y1="11" x2="42" y2="11" stroke="#C9A96E" strokeWidth="0.8" />
-              <path d="M52 11 C54 7, 58 5, 60 11 C62 5, 66 7, 68 11 C66 15, 62 17, 60 11 C58 17, 54 15, 52 11Z" fill="#C9A96E"/>
-              <path d="M44 11 C45.5 8.5, 48 7.5, 50 11 C48 14.5, 45.5 13.5, 44 11Z" fill="#C9A96E" opacity="0.7"/>
-              <path d="M70 11 C71.5 8.5, 74 7.5, 76 11 C74 14.5, 71.5 13.5, 70 11Z" fill="#C9A96E" opacity="0.7"/>
-              <line x1="78" y1="11" x2="120" y2="11" stroke="#C9A96E" strokeWidth="0.8" />
-            </svg>
+          {/* ── EYEBROW ── */}
+          <p style={{
+            color         : "#FFFFFF",
+            fontWeight    : 500,
+            letterSpacing : "8px",
+            textTransform : "uppercase",
+            fontSize      : "clamp(10px, 1.3vw, 13px)",
+            fontFamily    : "Inter, sans-serif",
+            margin        : "0 0 12px",
+            lineHeight    : 1,
+            /* never inherit any colour from outside */
+            WebkitTextFillColor : "#FFFFFF",
+          }}>
+            Casa Vacacional y Celebraciones
+          </p>
+
+          {/* ── ORNAMENT ── */}
+          <div style={{ marginBottom:"16px" }}>
+            <Ornament/>
           </div>
 
-          {/* TITLE — EL CORRIHUELO */}
-          <h1
-            style={{
-              color: "#FFFFFF",
-              fontFamily: "Cormorant Garamond, 'Playfair Display', serif",
-              fontSize: "clamp(4rem, 12vw, 10rem)",
-              fontWeight: 700,
-              lineHeight: 0.92,
-              letterSpacing: "-0.02em",
-              margin: "0 0 24px",
-              textShadow: "0 4px 20px rgba(0,0,0,0.45)",
-            }}
-          >
+          {/* ── H1 ── */}
+          <h1 style={{
+            color      : "#FFFFFF",
+            fontFamily : "Cormorant Garamond, 'Playfair Display', Georgia, serif",
+            fontSize   : "clamp(4rem, 12vw, 10.5rem)",
+            fontWeight : 700,
+            lineHeight : 0.92,
+            letterSpacing : "-0.02em",
+            margin     : "0 0 22px",
+            textShadow : "0 4px 20px rgba(0,0,0,0.45)",
+            WebkitTextFillColor : "#FFFFFF",
+          }}>
             El Corrihuelo
           </h1>
 
-          {/* SUBTITLE */}
-          <p
-            style={{
-              color: "#FFFFFF",
-              fontFamily: "Inter, sans-serif",
-              fontSize: "clamp(15px, 2vw, 19px)",
-              fontWeight: 300,
-              lineHeight: 1.7,
-              maxWidth: "580px",
-              margin: "0 0 44px",
-              opacity: 0.92,
-              textShadow: "0 2px 10px rgba(0,0,0,0.35)",
-            }}
-          >
-            El espacio perfecto para celebrar con quienes más quieres.
-            Piscina privada, naturaleza y exclusividad total en Cabezo de la Plata, Murcia.
+          {/* ── SUBTITLE ── */}
+          <p style={{
+            color      : "#FFFFFF",
+            fontFamily : "Inter, sans-serif",
+            fontSize   : "clamp(14px, 1.8vw, 18px)",
+            fontWeight : 300,
+            lineHeight : 1.7,
+            maxWidth   : "540px",
+            margin     : "0 0 40px",
+            textShadow : "0 2px 12px rgba(0,0,0,0.40)",
+            WebkitTextFillColor : "#FFFFFF",
+          }}>
+            El lugar perfecto para disfrutar de la naturaleza, celebrar con tu familia y crear recuerdos inolvidables en un entorno exclusivo.
           </p>
 
-          {/* BUTTONS */}
-          <div
-            style={{
-              display: "flex",
-              gap: "16px",
-              flexWrap: "wrap",
-              justifyContent: "center",
-            }}
-          >
-            {/* PRIMARY — DORADO */}
+          {/* ── BUTTONS ── */}
+          <div style={{ display:"flex", gap:"14px", flexWrap:"wrap", justifyContent:"center" }}>
+
+            {/* PRIMARY — gold */}
             <a
               href="#reserva"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("#reserva");
-              }}
+              onClick={(e) => { e.preventDefault(); scrollTo("#reserva"); }}
               style={{
-                display: "inline-block",
-                backgroundColor: "#C9A96E",
-                color: "#111111",
-                fontWeight: 700,
-                fontSize: "13px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                padding: "17px 40px",
-                borderRadius: "9999px",
+                display       : "inline-block",
+                background    : "#C9A96E",
+                color         : "#111111",
+                fontWeight    : 700,
+                fontSize      : "13px",
+                letterSpacing : "0.1em",
+                textTransform : "uppercase",
+                padding       : "16px 36px",
+                borderRadius  : "9999px",
                 textDecoration: "none",
-                fontFamily: "Inter, sans-serif",
-                boxShadow: "0 0 32px rgba(201,169,110,0.45), 0 4px 20px rgba(0,0,0,0.3)",
-                transition: "all 0.3s ease",
+                fontFamily    : "Inter, sans-serif",
+                boxShadow     : "0 0 30px rgba(201,169,110,0.45), 0 4px 18px rgba(0,0,0,0.30)",
+                transition    : "all .3s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#d8b87b";
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = "0 0 44px rgba(201,169,110,0.6), 0 6px 24px rgba(0,0,0,0.35)";
+                e.currentTarget.style.background  = "#d8b87b";
+                e.currentTarget.style.transform   = "translateY(-2px)";
+                e.currentTarget.style.boxShadow   = "0 0 42px rgba(201,169,110,0.62), 0 6px 22px rgba(0,0,0,0.35)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#C9A96E";
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 0 32px rgba(201,169,110,0.45), 0 4px 20px rgba(0,0,0,0.3)";
+                e.currentTarget.style.background  = "#C9A96E";
+                e.currentTarget.style.transform   = "translateY(0)";
+                e.currentTarget.style.boxShadow   = "0 0 30px rgba(201,169,110,0.45), 0 4px 18px rgba(0,0,0,0.30)";
               }}
             >
               Reservar ahora
             </a>
 
-            {/* SECONDARY — BORDE BLANCO */}
+            {/* SECONDARY — transparent white border */}
             <a
-              href="#descubre"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("#descubre");
-              }}
+              href="#discover"
+              onClick={(e) => { e.preventDefault(); scrollTo("#discover"); }}
               style={{
-                display: "inline-block",
-                backgroundColor: "transparent",
-                color: "#FFFFFF",
-                fontWeight: 600,
-                fontSize: "13px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                padding: "17px 40px",
-                borderRadius: "9999px",
-                textDecoration: "none",
-                fontFamily: "Inter, sans-serif",
-                border: "1.5px solid rgba(255,255,255,0.7)",
-                transition: "all 0.3s ease",
-                backdropFilter: "blur(8px)",
+                display         : "inline-block",
+                background      : "transparent",
+                color           : "#FFFFFF",
+                fontWeight      : 600,
+                fontSize        : "13px",
+                letterSpacing   : "0.1em",
+                textTransform   : "uppercase",
+                padding         : "16px 36px",
+                borderRadius    : "9999px",
+                textDecoration  : "none",
+                fontFamily      : "Inter, sans-serif",
+                border          : "1.5px solid rgba(255,255,255,0.72)",
+                backdropFilter  : "blur(8px)",
+                transition      : "all .3s",
+                WebkitTextFillColor: "#FFFFFF",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.12)";
-                e.currentTarget.style.borderColor = "rgba(255,255,255,1)";
-                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.background   = "rgba(255,255,255,0.13)";
+                e.currentTarget.style.borderColor  = "#ffffff";
+                e.currentTarget.style.transform    = "translateY(-2px)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.7)";
-                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.background   = "transparent";
+                e.currentTarget.style.borderColor  = "rgba(255,255,255,0.72)";
+                e.currentTarget.style.transform    = "translateY(0)";
               }}
             >
               Descubrir instalaciones
@@ -271,77 +256,66 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* ── SCROLL INDICATOR ── */}
+      {/* ════ SCROLL INDICATOR ════ */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
+        initial={{ opacity:0 }}
+        animate={{ opacity:1 }}
+        transition={{ delay:2, duration:1 }}
         style={{
-          position: "absolute",
-          bottom: "36px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 10,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "8px",
+          position      : "absolute",
+          bottom        : "34px",
+          left          : "50%",
+          transform     : "translateX(-50%)",
+          zIndex        : 10,
+          display       : "flex",
+          flexDirection : "column",
+          alignItems    : "center",
+          gap           : "8px",
         }}
       >
-        <span
-          style={{
-            color: "rgba(255,255,255,0.45)",
-            fontSize: "9px",
-            letterSpacing: "0.25em",
-            textTransform: "uppercase",
-            fontFamily: "Inter, sans-serif",
-            fontWeight: 600,
-          }}
-        >
+        <span style={{
+          color        : "rgba(255,255,255,0.42)",
+          fontSize     : "9px",
+          letterSpacing: ".25em",
+          textTransform: "uppercase",
+          fontFamily   : "Inter, sans-serif",
+          fontWeight   : 600,
+        }}>
           Scroll
         </span>
-        <div
-          style={{
-            width: "1px",
-            height: "48px",
-            backgroundColor: "rgba(255,255,255,0.15)",
-            overflow: "hidden",
-          }}
-        >
+        <div style={{ width:"1px", height:"46px", background:"rgba(255,255,255,0.14)", overflow:"hidden" }}>
           <motion.div
-            animate={{ y: ["-100%", "100%"] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-            style={{ width: "100%", height: "50%", backgroundColor: "#C9A96E" }}
+            animate={{ y:["-100%","100%"] }}
+            transition={{ repeat:Infinity, duration:1.5, ease:"linear" }}
+            style={{ width:"100%", height:"50%", background:"#C9A96E" }}
           />
         </div>
       </motion.div>
 
-      {/* ── CAROUSEL DOTS ── */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "36px",
-          right: "32px",
-          zIndex: 10,
-          display: "flex",
-          gap: "8px",
-          alignItems: "center",
-        }}
-      >
-        {HERO_IMAGES.map((_, i) => (
+      {/* ════ CAROUSEL DOTS ════ */}
+      <div style={{
+        position : "absolute",
+        bottom   : "34px",
+        right    : "32px",
+        zIndex   : 10,
+        display  : "flex",
+        gap      : "8px",
+        alignItems:"center",
+      }}>
+        {SLIDES.map((_, i) => (
           <button
             key={i}
-            onClick={() => setCurrentIndex(i)}
-            aria-label={`Imagen ${i + 1}`}
+            onClick={() => setIdx(i)}
+            aria-label={`Diapositiva ${i + 1}`}
             style={{
-              width: i === currentIndex ? "24px" : "6px",
-              height: "6px",
-              borderRadius: "9999px",
-              backgroundColor: i === currentIndex ? "#C9A96E" : "rgba(255,255,255,0.35)",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-              transition: "all 0.4s ease",
+              width        : i === idx ? "22px" : "6px",
+              height       : "6px",
+              borderRadius : "9999px",
+              background   : i === idx ? "#C9A96E" : "rgba(255,255,255,0.32)",
+              border       : "none",
+              cursor       : "pointer",
+              padding      : 0,
+              transition   : "all .4s ease",
             }}
           />
         ))}
