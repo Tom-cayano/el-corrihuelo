@@ -2,136 +2,104 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import {
-  Waves, Home, Baby, Flame, Music, Calendar, Users, PartyPopper, TreePine
-} from "lucide-react";
+import { Waves, Home, Baby, Flame, Music, Calendar, Users, TreePine, MapPin } from "lucide-react";
 
-const services = [
-  { icon: Waves, text: "Piscina Privada (temporada)" },
-  { icon: Flame, text: "Barbacoa completa" },
-  { icon: Home, text: "Salones acondicionados" },
-  { icon: Music, text: "Equipo de sonido" },
-  { icon: PartyPopper, text: "Futbolín y Ping Pong" },
-  { icon: Baby, text: "Zona de juegos infantil" },
-  { icon: TreePine, text: "Exteriores y jardín" },
-  { icon: Users, text: "Mobiliario para eventos" },
-  { icon: Calendar, text: "Exclusividad total" },
+const SERVICES = [
+  { icon: Calendar, title: "Exclusividad", desc: "La finca completa solo para ti y tus invitados. Sin compartir espacios." },
+  { icon: Waves, title: "Piscina Privada", desc: "Disponible en temporada cálida, con zona de césped y solárium." },
+  { icon: Home, title: "Salón Climatizado", desc: "Más de 120m² adaptables para comidas, bailes o reuniones." },
+  { icon: Flame, title: "Zona Gourmet", desc: "Cocina interior equipada y barbacoa exterior para tus asados." },
+  { icon: Music, title: "Sonido y Karaoke", desc: "Equipo profesional listo para que pongas tu propia banda sonora." },
+  { icon: TreePine, title: "Exteriores", desc: "Miles de metros de jardines cuidados al detalle y terrazas." },
+  { icon: Baby, title: "Zona Infantil", desc: "Espacio seguro al aire libre para que los más pequeños disfruten." },
+  { icon: Users, title: "Mobiliario", desc: "Mesas y sillas suficientes para organizar tu montaje a medida." },
+  { icon: MapPin, title: "Aparcamiento", desc: "Zona privada de parking dentro de la finca para máxima comodidad." },
 ];
 
 export default function Includes() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-10%" });
 
   return (
-    <section
-      id="incluye"
-      ref={ref}
-      className="section-padding relative overflow-hidden"
-      style={{ background: "var(--white)" }}
-    >
-      <div className="container-max relative z-10">
-        <div className="grid lg:grid-cols-12 gap-16 lg:gap-24 items-center">
-          
-          {/* Text Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-5"
-          >
-            <span className="tag-badge">Qué Incluye</span>
-            <div className="divider-gold-left" />
-            <h2
-              className="text-section-title font-serif mb-6"
-              style={{ color: "var(--dark)" }}
-            >
-              Todo preparado para que{" "}
-              <em className="italic" style={{ color: "var(--gold-dark)" }}>
-                tú solo disfrutes
-              </em>
-            </h2>
-            <p
-              className="text-lg leading-relaxed mb-8"
-              style={{ color: "var(--dark-secondary)", fontFamily: "Inter, sans-serif" }}
-            >
-              En El Corrihuelo no hay sorpresas. El precio de alquiler incluye el
-              uso exclusivo de todas nuestras instalaciones durante 12 horas completas.
-            </p>
+    <section id="incluye" ref={ref} style={{ background: "#ffffff", padding: "120px 0" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px" }}>
+        
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          style={{ textAlign: "center", marginBottom: "80px" }}
+        >
+          <span style={{
+            display: "block", fontFamily: "Inter, sans-serif", fontSize: "11px",
+            fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
+            color: "#C9A96E", marginBottom: "16px",
+          }}>
+            Qué Incluye
+          </span>
+          <h2 style={{
+            fontFamily: "Playfair Display, Georgia, serif",
+            fontSize: "clamp(2rem, 5vw, 3.5rem)",
+            fontWeight: 700, color: "#1C1A17", lineHeight: 1.1,
+            margin: "0 0 20px",
+          }}>
+            Todo preparado para que <em style={{ fontStyle: "italic", color: "#A8854A" }}>tú solo disfrutes</em>
+          </h2>
+          <p style={{
+            fontFamily: "Inter, sans-serif", fontSize: "clamp(15px, 2vw, 17px)",
+            color: "#5C5249", fontWeight: 300, lineHeight: 1.75, maxWidth: "600px", margin: "0 auto",
+          }}>
+            En El Corrihuelo no hay sorpresas. El alquiler incluye el uso exclusivo de todas nuestras instalaciones para que organices el evento a tu manera.
+          </p>
+        </motion.div>
 
+        {/* Grid */}
+        <div className="includes-grid" style={{
+          display: "grid", gap: "32px",
+        }}>
+          <style>{`
+            .includes-grid { grid-template-columns: 1fr; }
+            @media (min-width: 640px) { .includes-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; } }
+            @media (min-width: 1024px) { .includes-grid { grid-template-columns: repeat(3, 1fr); gap: 56px 40px; } }
+          `}</style>
+          
+          {SERVICES.map((srv, i) => (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              key={i}
+              initial={{ opacity: 0, y: 24 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="p-8 rounded-3xl relative overflow-hidden group"
-              style={{
-                background: "linear-gradient(145deg, var(--dark) 0%, var(--dark-secondary) 100%)",
-                boxShadow: "var(--shadow-strong)"
-              }}
+              transition={{ duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}
             >
-              <div 
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" 
-                style={{
-                  background: "radial-gradient(circle at top right, rgba(201,169,110,0.15) 0%, transparent 60%)"
-                }}
-              />
-              <span
-                className="text-sm font-semibold tracking-widest uppercase block mb-3"
-                style={{ color: "var(--gold-light)", fontFamily: "Inter, sans-serif" }}
+              <div style={{
+                width: "72px", height: "72px", borderRadius: "50%",
+                background: "#FAF8F4", border: "1px solid rgba(212,196,176,0.5)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                marginBottom: "24px", color: "#C9A96E",
+                transition: "transform .4s ease, background .4s ease",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.background = "#F5EDD8"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.background = "#FAF8F4"; }}
               >
-                Alquiler Completo
-              </span>
-              <div className="flex items-end gap-2 text-white">
-                <span className="text-sm pb-2 opacity-80 font-medium">Desde</span>
-                <span className="font-serif font-bold text-5xl md:text-6xl tracking-tight">200€</span>
+                <srv.icon size={28} strokeWidth={1.5} />
               </div>
-              <p
-                className="mt-4 text-sm"
-                style={{ color: "rgba(255,255,255,0.7)", fontFamily: "Inter, sans-serif" }}
-              >
-                * El precio final puede variar según el número de asistentes, tipo
-                de evento y necesidades específicas.
+              <h3 style={{
+                fontFamily: "Playfair Display, serif", fontSize: "1.3rem", fontWeight: 700,
+                color: "#1C1A17", marginBottom: "12px",
+              }}>
+                {srv.title}
+              </h3>
+              <p style={{
+                fontFamily: "Inter, sans-serif", fontSize: "14.5px", color: "#5C5249",
+                lineHeight: 1.6, fontWeight: 300,
+              }}>
+                {srv.desc}
               </p>
             </motion.div>
-          </motion.div>
-
-          {/* Grid de servicios */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-7"
-          >
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
-              {services.map((item, index) => (
-                <motion.div
-                  key={item.text}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.4 + index * 0.05, duration: 0.6 }}
-                  whileHover={{ y: -4, boxShadow: "var(--shadow-medium)", borderColor: "var(--gold)" }}
-                  className="bg-white rounded-2xl p-6 flex flex-col items-center text-center gap-4 transition-all duration-300 border border-transparent"
-                  style={{
-                    boxShadow: "var(--shadow-xs)",
-                    border: "1px solid var(--border-light)"
-                  }}
-                >
-                  <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center transition-transform duration-500 hover:rotate-12"
-                    style={{ background: "var(--cream-dark)" }}
-                  >
-                    <item.icon size={20} style={{ color: "var(--dark)" }} strokeWidth={1.5} />
-                  </div>
-                  <span
-                    className="text-sm font-semibold"
-                    style={{ color: "var(--dark-secondary)", fontFamily: "Inter, sans-serif" }}
-                  >
-                    {item.text}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+          ))}
         </div>
+
       </div>
     </section>
   );

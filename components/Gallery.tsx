@@ -1,415 +1,300 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
-import { motion, useInView, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight, ZoomIn, Maximize2 } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Expand } from "lucide-react";
 
-const galleryImages = [
-  { src: "/images/baile-noche.jpg", alt: "Fiesta y baile nocturno en El Corrihuelo", category: "Celebraciones", aspect: "portrait" },
-  { src: "/images/mesa-gourmet.jpg", alt: "Mesa gourmet decorada para celebración en El Corrihuelo", category: "Gastronomía", aspect: "portrait" },
-  { src: "/images/grupo-flamenca.jpg", alt: "Grupo de celebración flamenca en El Corrihuelo", category: "Celebraciones", aspect: "portrait" },
-  { src: "/images/hero-salon.jpg", alt: "Salón principal de El Corrihuelo decorado con globos", category: "Instalaciones", aspect: "landscape" },
-  { src: "/images/paella-grupo.jpg", alt: "Paella gigante con grupo de amigos en El Corrihuelo", category: "Gastronomía", aspect: "portrait" },
-  { src: "/images/evento-grupo.jpg", alt: "Celebración de cumpleaños con trajes típicos en El Corrihuelo", category: "Celebraciones", aspect: "portrait" },
-  { src: "/images/guitarrista.jpg", alt: "Guitarrista y bailaora actuando en El Corrihuelo", category: "Entretenimiento", aspect: "portrait" },
-  { src: "/images/pareja-flamenco.jpg", alt: "Pareja bailando flamenco en El Corrihuelo", category: "Entretenimiento", aspect: "portrait" },
-  { src: "/images/terraza-piscina.jpg", alt: "Terraza con vistas a la piscina de El Corrihuelo", category: "Instalaciones", aspect: "portrait" },
-  { src: "/images/grupo-exterior.jpg", alt: "Grupo de amigos celebrando en el exterior de El Corrihuelo", category: "Celebraciones", aspect: "portrait" },
-  { src: "/images/mesa-tapas.jpg", alt: "Mesa con tapas y decoración típica en El Corrihuelo", category: "Gastronomía", aspect: "portrait" },
-  { src: "/images/salon-decorado.jpg", alt: "Salón decorado con guirnaldas y mesas preparadas", category: "Instalaciones", aspect: "portrait" },
-  { src: "/images/baile-exterior.jpg", alt: "Baile flamenco en el exterior de El Corrihuelo", category: "Entretenimiento", aspect: "portrait" },
-  { src: "/images/grupo-entrada.jpg", alt: "Grupo de celebración en la entrada de El Corrihuelo", category: "Celebraciones", aspect: "portrait" },
-  { src: "/images/flores-salon.jpg", alt: "Flores y decoración floral en El Corrihuelo", category: "Detalles", aspect: "portrait" },
-  { src: "/images/baile-dia.jpg", alt: "Baile y fiesta durante el día en los salones", category: "Celebraciones", aspect: "portrait" },
-  { src: "/images/flores-entrada.jpg", alt: "Entrada de El Corrihuelo con flores y naturaleza murciana", category: "Detalles", aspect: "portrait" },
-  { src: "/images/paella2.jpg", alt: "Paella tradicional en El Corrihuelo", category: "Gastronomía", aspect: "portrait" },
+/* ── Data ── */
+const PHOTOS = [
+  { src: "/images/terraza-piscina.jpg",   alt: "Terraza con piscina privada",     cat: "Instalaciones" },
+  { src: "/images/hero-salon.jpg",        alt: "Gran salón decorado",             cat: "Instalaciones" },
+  { src: "/images/mesa-gourmet.jpg",      alt: "Mesa gourmet para celebración",   cat: "Gastronomía"   },
+  { src: "/images/baile-noche.jpg",       alt: "Fiesta y baile nocturno",         cat: "Celebraciones" },
+  { src: "/images/paella-grupo.jpg",      alt: "Paella con grupo de amigos",      cat: "Gastronomía"   },
+  { src: "/images/grupo-flamenca.jpg",    alt: "Celebración flamenca",            cat: "Celebraciones" },
+  { src: "/images/guitarrista.jpg",       alt: "Guitarrista en actuación",        cat: "Entretenimiento" },
+  { src: "/images/baile-exterior.jpg",    alt: "Baile en exterior",               cat: "Celebraciones" },
+  { src: "/images/salon-decorado.jpg",    alt: "Salón decorado con guirnaldas",   cat: "Instalaciones" },
+  { src: "/images/flores-salon.jpg",      alt: "Detalles florales",               cat: "Detalles"      },
+  { src: "/images/grupo-exterior.jpg",    alt: "Grupo en el exterior",            cat: "Celebraciones" },
+  { src: "/images/paella2.jpg",           alt: "Paella tradicional murciana",     cat: "Gastronomía"   },
+  { src: "/images/baile-dia.jpg",         alt: "Baile y fiesta de día",           cat: "Celebraciones" },
+  { src: "/images/flores-entrada.jpg",    alt: "Entrada con flores",              cat: "Detalles"      },
+  { src: "/images/evento-grupo.jpg",      alt: "Evento privado de grupo",         cat: "Celebraciones" },
+  { src: "/images/hero-jardin.jpg",       alt: "Jardines de la finca",            cat: "Instalaciones" },
 ];
 
-const categories = ["Todas", "Celebraciones", "Gastronomía", "Entretenimiento", "Instalaciones", "Detalles"];
+const CATS = ["Todas", "Instalaciones", "Celebraciones", "Gastronomía", "Entretenimiento", "Detalles"];
 
-function GalleryCard({
-  img,
-  index,
-  onClick,
-}: {
-  img: (typeof galleryImages)[0];
-  index: number;
-  onClick: () => void;
+/* ── Lightbox ── */
+function Lightbox({ images, current, onClose, onPrev, onNext }: {
+  images: typeof PHOTOS; current: number;
+  onClose: () => void; onPrev: () => void; onNext: () => void;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const rotateX = useTransform(mouseY, [-0.5, 0.5], [4, -4]);
-  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-4, 4]);
-
-  const handleMouse = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
-    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 32, filter: "blur(8px)" }}
-      animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
-      transition={{
-        duration: 0.7,
-        delay: (index % 6) * 0.08,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className="masonry-item group"
-      style={{ perspective: "1000px" }}
-    >
-      <motion.div
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        onMouseMove={handleMouse}
-        onMouseLeave={handleMouseLeave}
-        className="relative rounded-2xl overflow-hidden cursor-pointer gallery-card"
-        onClick={onClick}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => e.key === "Enter" && onClick()}
-        aria-label={`Ver imagen: ${img.alt}`}
-      >
-        <Image
-          src={img.src}
-          alt={img.alt}
-          width={800}
-          height={600}
-          className="w-full h-auto object-cover gallery-img"
-          loading="lazy"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        />
-
-        {/* Hover overlay */}
-        <div className="gallery-hover-overlay absolute inset-0">
-          {/* Gradient */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: "linear-gradient(to top, rgba(28,26,23,0.7) 0%, rgba(28,26,23,0.1) 60%, transparent 100%)",
-            }}
-          />
-          {/* Zoom icon */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="gallery-zoom-btn">
-              <Maximize2 size={18} color="white" />
-            </div>
-          </div>
-          {/* Bottom info */}
-          <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
-            <span className="gallery-category-badge">{img.category}</span>
-            <span className="gallery-img-number text-white/60 text-xs" style={{ fontFamily: "Inter, sans-serif" }}>
-              0{index + 1}
-            </span>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function Lightbox({
-  images,
-  index,
-  onClose,
-  onPrev,
-  onNext,
-}: {
-  images: typeof galleryImages;
-  index: number;
-  onClose: () => void;
-  onPrev: () => void;
-  onNext: () => void;
-}) {
-  const [scale, setScale] = useState(1);
-  const [isZoomed, setIsZoomed] = useState(false);
-
-  const resetZoom = () => {
-    setScale(1);
-    setIsZoomed(false);
-  };
-
-  // Keyboard navigation
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") { resetZoom(); onPrev(); }
-      else if (e.key === "ArrowRight") { resetZoom(); onNext(); }
-      else if (e.key === "Escape") onClose();
-      else if (e.key === "+" || e.key === "=") setScale((s) => Math.min(s + 0.25, 3));
-      else if (e.key === "-") setScale((s) => Math.max(s - 0.25, 1));
+    const fn = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") onPrev();
+      if (e.key === "ArrowRight") onNext();
     };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [onClose, onNext, onPrev]);
-
-  // Scroll lock effect
-  useEffect(() => {
-    const originalStyle = window.getComputedStyle(document.body).overflow;
+    window.addEventListener("keydown", fn);
     document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = originalStyle;
-    };
-  }, []);
+    return () => { window.removeEventListener("keydown", fn); document.body.style.overflow = ""; };
+  }, [onClose, onPrev, onNext]);
 
-
-  const toggleZoom = () => {
-    if (isZoomed) { setScale(1); setIsZoomed(false); }
-    else { setScale(2); setIsZoomed(true); }
-  };
+  const img = images[current];
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
-      className="lightbox-premium"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      style={{
+        position: "fixed", inset: 0, zIndex: 1000,
+        background: "rgba(4,4,4,0.97)",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
+        padding: "clamp(16px, 4vw, 48px)",
+      }}
       onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Visor de galería"
     >
-      {/* Blur backdrop */}
-      <div className="lightbox-backdrop" />
-
-      {/* Top bar */}
-      <div
-        className="lightbox-topbar"
-        onClick={(e) => e.stopPropagation()}
+      {/* Controls */}
+      <button
+        onClick={(e) => { e.stopPropagation(); onClose(); }}
+        aria-label="Cerrar"
+        style={{
+          position: "absolute", top: "20px", right: "20px",
+          background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.15)",
+          borderRadius: "50%", width: "48px", height: "48px",
+          color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "pointer", backdropFilter: "blur(12px)", transition: "all .3s",
+        }}
       >
-        <div className="flex items-center gap-3">
-          <span className="lightbox-counter">
-            {String(index + 1).padStart(2, "0")} / {String(images.length).padStart(2, "0")}
-          </span>
-          <span className="lightbox-category">{images[index].category}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            className="lightbox-btn"
-            onClick={toggleZoom}
-            aria-label={isZoomed ? "Restablecer zoom" : "Zoom"}
-          >
-            <ZoomIn size={18} color="white" />
-          </button>
-          <button
-            className="lightbox-btn"
-            onClick={onClose}
-            aria-label="Cerrar galería"
-          >
-            <X size={18} color="white" />
-          </button>
-        </div>
-      </div>
+        <X size={20} />
+      </button>
 
       {/* Image */}
       <motion.div
-        key={index}
-        initial={{ opacity: 0, scale: 0.92, y: 16 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.92, y: -16 }}
+        key={current}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="lightbox-image-wrapper"
-        onClick={(e) => { e.stopPropagation(); toggleZoom(); }}
-        style={{ cursor: isZoomed ? "zoom-out" : "zoom-in" }}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: "relative", width: "100%",
+          maxWidth: "min(90vw, 1000px)",
+          maxHeight: "70vh",
+          aspectRatio: "3/2",
+          borderRadius: "16px", overflow: "hidden",
+        }}
       >
-        <Image
-          src={images[index].src}
-          alt={images[index].alt}
-          width={1400}
-          height={900}
-          className="lightbox-image"
-          style={{
-            transform: `scale(${scale})`,
-            transition: "transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
-            transformOrigin: "center center",
-          }}
-          priority
-        />
+        <Image src={img.src} alt={img.alt} fill style={{ objectFit: "cover" }} quality={90} />
+        {/* Caption */}
+        <div style={{
+          position: "absolute", bottom: 0, left: 0, right: 0,
+          background: "linear-gradient(to top, rgba(0,0,0,0.70) 0%, transparent 100%)",
+          padding: "24px 20px 16px",
+        }}>
+          <p style={{ color: "#fff", fontFamily: "Inter, sans-serif", fontSize: "14px", fontWeight: 400 }}>{img.alt}</p>
+          <p style={{ color: "#C9A96E", fontFamily: "Inter, sans-serif", fontSize: "11px", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", marginTop: "4px" }}>{img.cat}</p>
+        </div>
       </motion.div>
 
-      {/* Navigation */}
-      <button
-        className="lightbox-nav lightbox-nav-prev"
-        onClick={(e) => { e.stopPropagation(); resetZoom(); onPrev(); }}
-        aria-label="Imagen anterior"
-      >
-        <ChevronLeft size={24} color="white" />
-      </button>
-      <button
-        className="lightbox-nav lightbox-nav-next"
-        onClick={(e) => { e.stopPropagation(); resetZoom(); onNext(); }}
-        aria-label="Imagen siguiente"
-      >
-        <ChevronRight size={24} color="white" />
-      </button>
+      {/* Prev / Next */}
+      {[{ fn: onPrev, pos: "left", icon: <ChevronLeft size={22} />, label: "Anterior" },
+        { fn: onNext, pos: "right", icon: <ChevronRight size={22} />, label: "Siguiente" }].map(({ fn, pos, icon, label }) => (
+        <button
+          key={pos}
+          onClick={(e) => { e.stopPropagation(); fn(); }}
+          aria-label={label}
+          style={{
+            position: "absolute", top: "50%", transform: "translateY(-50%)",
+            [pos]: "clamp(12px, 3vw, 32px)",
+            background: "rgba(255,255,255,0.10)", border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: "50%", width: "52px", height: "52px",
+            color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer", backdropFilter: "blur(12px)", transition: "all .3s",
+          }}
+        >
+          {icon}
+        </button>
+      ))}
 
-      {/* Thumbnail strip */}
-      <div className="lightbox-thumbnails" onClick={(e) => e.stopPropagation()}>
-        {images.map((img, i) => (
+      {/* Thumbnails */}
+      <div style={{
+        display: "flex", gap: "8px", marginTop: "20px",
+        overflowX: "auto", maxWidth: "min(90vw, 960px)",
+        padding: "4px 0",
+        scrollbarWidth: "none",
+      }}>
+        {images.map((im, i) => (
           <button
             key={i}
-            className={`lightbox-thumb ${i === index ? "lightbox-thumb-active" : ""}`}
-            onClick={() => {}}
-            aria-label={`Ver imagen ${i + 1}`}
+            onClick={(e) => { e.stopPropagation(); }}
+            style={{
+              flexShrink: 0, width: "64px", height: "44px",
+              borderRadius: "6px", overflow: "hidden", position: "relative",
+              border: i === current ? "2px solid #C9A96E" : "2px solid transparent",
+              transition: "border .25s", cursor: "pointer", background: "none", padding: 0,
+              opacity: i === current ? 1 : 0.5,
+            }}
           >
-            <Image
-              src={img.src}
-              alt={img.alt}
-              width={80}
-              height={60}
-              className="w-full h-full object-cover"
-            />
+            <Image src={im.src} alt={im.alt} fill style={{ objectFit: "cover" }} sizes="64px" />
           </button>
         ))}
       </div>
 
-      {/* Caption */}
-      <div className="lightbox-caption">
-        <p>{images[index].alt}</p>
-        <span>Use ← → para navegar · ESC para cerrar · + / − para zoom</span>
-      </div>
+      {/* Counter */}
+      <p style={{ color: "rgba(255,255,255,0.50)", fontFamily: "Inter, sans-serif", fontSize: "13px", marginTop: "12px" }}>
+        {current + 1} / {images.length}
+      </p>
     </motion.div>
   );
 }
 
+/* ── Main Gallery ── */
 export default function Gallery() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-  const [activeCategory, setActiveCategory] = useState("Todas");
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [cat, setCat] = useState("Todas");
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const headerRef = useRef(null);
+  const headerInView = useInView(headerRef, { once: true });
 
-  const filtered = activeCategory === "Todas"
-    ? galleryImages
-    : galleryImages.filter((img) => img.category === activeCategory);
+  const filtered = cat === "Todas" ? PHOTOS : PHOTOS.filter((p) => p.cat === cat);
 
-  const openLightbox = useCallback((index: number) => {
-    setLightboxIndex(index);
-  }, []);
+  const openAt = useCallback((i: number) => setLightboxIdx(i), []);
+  const closeLightbox = useCallback(() => setLightboxIdx(null), []);
+  const goPrev = useCallback(() => setLightboxIdx((i) => (i === null ? null : (i - 1 + filtered.length) % filtered.length)), [filtered.length]);
+  const goNext = useCallback(() => setLightboxIdx((i) => (i === null ? null : (i + 1) % filtered.length)), [filtered.length]);
 
-  const closeLightbox = useCallback(() => {
-    setLightboxIndex(null);
-  }, []);
-
-  const prev = useCallback(() => {
-    setLightboxIndex((i) => (i !== null ? (i - 1 + filtered.length) % filtered.length : null));
-  }, [filtered.length]);
-
-  const next = useCallback(() => {
-    setLightboxIndex((i) => (i !== null ? (i + 1) % filtered.length : null));
-  }, [filtered.length]);
+  /* Touch swipe in lightbox */
+  const touchStart = useRef<number | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => { touchStart.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart.current === null) return;
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) diff > 0 ? goNext() : goPrev();
+    touchStart.current = null;
+  };
 
   return (
-    <section
-      id="galeria"
-      ref={ref}
-      className="section-padding"
-      style={{ background: "var(--cream)" }}
-    >
-      <div className="container-max">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-14"
-        >
-          <span className="tag-badge" aria-label="Sección Galería">Galería</span>
-          <div className="divider-gold" />
-          <h2 className="text-section-title font-serif mb-4" style={{ color: "var(--dark)" }}>
-            Momentos que{" "}
-            <em className="italic" style={{ color: "var(--gold-dark)" }}>
-              hablan por sí solos
-            </em>
-          </h2>
-          <p className="text-base max-w-xl mx-auto" style={{ color: "var(--dark-secondary)", fontFamily: "Inter, sans-serif" }}>
-            Cada imagen es un recuerdo real. Así de vivas son las celebraciones en El Corrihuelo.
-          </p>
-        </motion.div>
+    <section id="galeria" style={{ background: "#0E0D0B", padding: "80px 0 96px" }}>
+      {/* Header */}
+      <motion.div
+        ref={headerRef}
+        initial={{ opacity: 0, y: 24 }}
+        animate={headerInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.9 }}
+        style={{ textAlign: "center", marginBottom: "48px", padding: "0 20px" }}
+      >
+        <span style={{ display: "block", fontFamily: "Inter, sans-serif", fontSize: "11px", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase", color: "#C9A96E", marginBottom: "14px" }}>
+          Galería
+        </span>
+        <h2 style={{ fontFamily: "Playfair Display, Georgia, serif", fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 700, color: "#fff", lineHeight: 1.1, margin: "0 0 12px" }}>
+          Momentos que inspiran
+        </h2>
+        <p style={{ fontFamily: "Inter, sans-serif", fontSize: "clamp(14px, 2vw, 17px)", color: "rgba(255,255,255,0.55)", fontWeight: 300, maxWidth: "480px", margin: "0 auto 36px" }}>
+          Cada imagen cuenta una historia. La tuya está por escribirse.
+        </p>
 
-        {/* Filter tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2, duration: 0.7 }}
-          className="flex flex-wrap justify-center gap-2 mb-12"
-          role="tablist"
-          aria-label="Filtros de galería"
-        >
-          {categories.map((cat) => (
-            <motion.button
-              key={cat}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setActiveCategory(cat)}
-              role="tab"
-              aria-selected={activeCategory === cat}
-              className="gallery-filter-btn"
+        {/* Category filters */}
+        <div style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap", padding: "0 20px" }}>
+          {CATS.map((c) => (
+            <button
+              key={c}
+              onClick={() => setCat(c)}
               style={{
-                background: activeCategory === cat ? "var(--gold)" : "var(--white)",
-                color: activeCategory === cat ? "var(--dark)" : "var(--dark-secondary)",
-                borderColor: activeCategory === cat ? "var(--gold)" : "var(--warm-dark)",
-                boxShadow: activeCategory === cat ? "var(--shadow-gold)" : "var(--shadow-soft)",
+                padding: "9px 18px", borderRadius: "9999px", cursor: "pointer",
+                fontFamily: "Inter, sans-serif", fontSize: "12px", fontWeight: 600,
+                letterSpacing: "0.08em", border: "none",
+                background: cat === c ? "#C9A96E" : "rgba(255,255,255,0.07)",
+                color: cat === c ? "#111" : "rgba(255,255,255,0.60)",
+                transition: "all .3s",
               }}
             >
-              {cat}
-              {activeCategory === cat && (
-                <span className="gallery-filter-dot" />
-              )}
-            </motion.button>
+              {c}
+            </button>
           ))}
-        </motion.div>
+        </div>
+      </motion.div>
 
-        {/* Masonry Grid */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeCategory}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="masonry-grid"
-          >
-            {filtered.map((img, i) => (
-              <GalleryCard
-                key={img.src + i}
-                img={img}
-                index={i}
-                onClick={() => openLightbox(i)}
-              />
-            ))}
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Count */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.5 }}
-          className="text-center mt-10 text-sm"
-          style={{ color: "var(--dark-secondary)", fontFamily: "Inter, sans-serif" }}
-        >
-          Mostrando <strong style={{ color: "var(--gold-dark)" }}>{filtered.length}</strong> de {galleryImages.length} fotografías reales · Haz clic para ampliar
-        </motion.p>
+      {/* Grid */}
+      <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 clamp(16px, 3vw, 48px)" }}>
+        <div style={{ columns: "2", columnGap: "12px" }} className="gallery-masonry">
+          <style>{`
+            @media(min-width:640px)  { .gallery-masonry { columns: 3 !important; } }
+            @media(min-width:1024px) { .gallery-masonry { columns: 4 !important; } }
+          `}</style>
+          {filtered.map((img, i) => (
+            <motion.div
+              key={`${cat}-${i}`}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.45, delay: i * 0.04 }}
+              style={{ breakInside: "avoid", marginBottom: "12px", display: "block" }}
+            >
+              <div
+                onClick={() => openAt(i)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === "Enter" && openAt(i)}
+                aria-label={`Abrir: ${img.alt}`}
+                style={{ position: "relative", borderRadius: "12px", overflow: "hidden", cursor: "zoom-in", display: "block" }}
+                className="gallery-thumb-wrap"
+              >
+                <style>{`
+                  .gallery-thumb-wrap:hover .gallery-thumb-overlay { opacity: 1 !important; }
+                  .gallery-thumb-wrap:hover img { transform: scale(1.04); }
+                `}</style>
+                <div style={{ position: "relative", width: "100%", paddingBottom: i % 3 === 0 ? "125%" : "75%", background: "#1a1a1a" }}>
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    loading="lazy"
+                    style={{ objectFit: "cover", transition: "transform .5s ease" }}
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  />
+                  {/* Hover overlay */}
+                  <div
+                    className="gallery-thumb-overlay"
+                    style={{
+                      position: "absolute", inset: 0, opacity: 0,
+                      background: "rgba(0,0,0,0.45)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      transition: "opacity .3s",
+                    }}
+                  >
+                    <div style={{
+                      background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)",
+                      border: "1px solid rgba(255,255,255,0.25)",
+                      borderRadius: "50%", width: "48px", height: "48px",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: "#fff",
+                    }}>
+                      <Expand size={20} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
-      {/* Premium Lightbox */}
+      {/* Lightbox */}
       <AnimatePresence>
-        {lightboxIndex !== null && (
-          <Lightbox
-            images={filtered}
-            index={lightboxIndex}
-            onClose={closeLightbox}
-            onPrev={prev}
-            onNext={next}
-          />
+        {lightboxIdx !== null && (
+          <div onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+            <Lightbox
+              images={filtered}
+              current={lightboxIdx}
+              onClose={closeLightbox}
+              onPrev={goPrev}
+              onNext={goNext}
+            />
+          </div>
         )}
       </AnimatePresence>
     </section>
