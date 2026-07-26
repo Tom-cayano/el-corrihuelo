@@ -16,163 +16,170 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
     if (href === "#inicio") {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-    const element = document.querySelector(href);
-    if (element) {
-      const offset = 90;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+    const el = document.querySelector(href);
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.pageYOffset - 90;
+      window.scrollTo({ top, behavior: "smooth" });
     }
   };
+
+  const navBg = scrolled
+    ? "rgba(8, 8, 8, 0.96)"
+    : "rgba(0, 0, 0, 0.45)";
+
+  const navShadow = scrolled
+    ? "0 4px 40px rgba(0,0,0,0.4)"
+    : "none";
 
   return (
     <>
       <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         style={{
           position: "fixed",
           top: 0,
           left: 0,
           right: 0,
-          zIndex: 50,
-          transition: "all 0.5s ease",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          backgroundColor: scrolled
-            ? "rgba(255, 255, 255, 0.97)"
-            : "rgba(255, 255, 255, 0.85)",
-          borderBottom: "1px solid rgba(180, 150, 90, 0.2)",
-          boxShadow: scrolled
-            ? "0 4px 30px rgba(0,0,0,0.12)"
-            : "0 2px 15px rgba(0,0,0,0.06)",
-          paddingTop: scrolled ? "8px" : "12px",
-          paddingBottom: scrolled ? "8px" : "12px",
+          zIndex: 100,
+          height: scrolled ? "75px" : "90px",
+          transition: "all 0.4s ease",
+          backdropFilter: "blur(18px)",
+          WebkitBackdropFilter: "blur(18px)",
+          backgroundColor: navBg,
+          borderBottom: "1px solid rgba(201,169,110,0.15)",
+          boxShadow: navShadow,
         }}
       >
-        <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 24px" }}>
-
-          {/* MOBILE */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }} className="lg:hidden">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              style={{ background: "none", border: "none", cursor: "pointer", padding: "8px", color: "#2C3A2A" }}
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-
-            <a
-              href="#inicio"
-              onClick={(e) => scrollToSection(e, "#inicio")}
-              aria-label="Ir a Inicio"
-              style={{ display: "flex", alignItems: "center", justifyContent: "center", flexGrow: 1 }}
+        <div
+          style={{
+            maxWidth: "1440px",
+            margin: "0 auto",
+            padding: "0 32px",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          {/* ── LOGO ── */}
+          <a
+            href="#inicio"
+            onClick={(e) => scrollTo(e, "#inicio")}
+            aria-label="El Corrihuelo — Inicio"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexShrink: 0,
+              textDecoration: "none",
+            }}
+          >
+            {/*
+              El logo oficial PNG tiene fondo blanco.
+              Lo mostramos dentro de una píldora blanca
+              para que contraste perfectamente sobre el header oscuro.
+            */}
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                backgroundColor: "rgba(255,255,255,0.96)",
+                borderRadius: "12px",
+                padding: "6px 14px",
+                boxShadow: "0 2px 16px rgba(0,0,0,0.25)",
+                transition: "all 0.4s ease",
+              }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/logo-oficial.png"
                 alt="El Corrihuelo — Casa Vacacional y Celebraciones"
                 style={{
-                  height: "60px",
+                  height: scrolled ? "54px" : "66px",
                   width: "auto",
-                  objectFit: "contain",
                   display: "block",
+                  objectFit: "contain",
+                  transition: "height 0.4s ease",
                 }}
               />
-            </a>
+            </span>
+          </a>
 
-            <div style={{ width: "44px" }} />
+          {/* ── DESKTOP MENU ── */}
+          <div
+            className="hidden lg:flex"
+            style={{ alignItems: "center", gap: "40px" }}
+          >
+            {NAV_LINKS.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => scrollTo(e, link.href)}
+                style={{
+                  color: "rgba(255,255,255,0.88)",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  letterSpacing: "0.08em",
+                  textDecoration: "none",
+                  fontFamily: "Inter, sans-serif",
+                  textTransform: "uppercase",
+                  transition: "color 0.3s ease",
+                  position: "relative",
+                  paddingBottom: "4px",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#C9A96E";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "rgba(255,255,255,0.88)";
+                }}
+              >
+                {link.name}
+              </a>
+            ))}
           </div>
 
-          {/* DESKTOP */}
-          <div style={{ display: "none", alignItems: "center", justifyContent: "space-between" }} className="hidden lg:flex">
-
-            {/* LOGO */}
-            <a
-              href="#inicio"
-              onClick={(e) => scrollToSection(e, "#inicio")}
-              aria-label="Ir a Inicio"
-              style={{ display: "flex", alignItems: "center", flexShrink: 0 }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/logo-oficial.png"
-                alt="El Corrihuelo — Casa Vacacional y Celebraciones"
-                style={{
-                  height: scrolled ? "72px" : "88px",
-                  width: "auto",
-                  objectFit: "contain",
-                  display: "block",
-                  transition: "height 0.5s ease",
-                }}
-              />
-            </a>
-
-            {/* NAV LINKS */}
-            <div style={{ display: "flex", alignItems: "center", gap: "40px" }}>
-              {NAV_LINKS.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => scrollToSection(e, link.href)}
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    letterSpacing: "0.05em",
-                    color: "#2C3A2A",
-                    textDecoration: "none",
-                    transition: "color 0.3s ease",
-                    fontFamily: "Inter, sans-serif",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#C9A96E")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#2C3A2A")}
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-
-            {/* RESERVA BUTTON */}
+          {/* ── RESERVA BUTTON (Desktop) ── */}
+          <div className="hidden lg:flex">
             <a
               href="#reserva"
-              onClick={(e) => scrollToSection(e, "#reserva")}
+              onClick={(e) => scrollTo(e, "#reserva")}
               style={{
+                display: "inline-block",
                 backgroundColor: "#C9A96E",
-                color: "#1a1a1a",
+                color: "#111111",
                 fontWeight: 700,
-                fontSize: "14px",
-                letterSpacing: "0.05em",
+                fontSize: "13px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
                 padding: "14px 32px",
                 borderRadius: "9999px",
                 textDecoration: "none",
-                display: "inline-block",
-                boxShadow: "0 0 20px rgba(201, 169, 110, 0.35)",
-                transition: "all 0.3s ease",
                 fontFamily: "Inter, sans-serif",
+                boxShadow: "0 0 24px rgba(201,169,110,0.4), 0 4px 12px rgba(0,0,0,0.2)",
+                transition: "all 0.3s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#d4b47a";
-                e.currentTarget.style.boxShadow = "0 0 30px rgba(201, 169, 110, 0.55)";
-                e.currentTarget.style.transform = "translateY(-1px)";
+                e.currentTarget.style.backgroundColor = "#d8b87b";
+                e.currentTarget.style.boxShadow = "0 0 36px rgba(201,169,110,0.6), 0 4px 16px rgba(0,0,0,0.25)";
+                e.currentTarget.style.transform = "translateY(-2px)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "#C9A96E";
-                e.currentTarget.style.boxShadow = "0 0 20px rgba(201, 169, 110, 0.35)";
+                e.currentTarget.style.boxShadow = "0 0 24px rgba(201,169,110,0.4), 0 4px 12px rgba(0,0,0,0.2)";
                 e.currentTarget.style.transform = "translateY(0)";
               }}
             >
@@ -180,80 +187,125 @@ export default function Navbar() {
             </a>
           </div>
 
+          {/* ── HAMBURGER (Mobile) ── */}
+          <button
+            className="lg:hidden"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Menú"
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "#ffffff",
+              padding: "8px",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+          </button>
         </div>
       </motion.nav>
 
-      {/* MOBILE MENU */}
+      {/* ── MOBILE FULL SCREEN MENU ── */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
+            className="lg:hidden"
             style={{
               position: "fixed",
               inset: 0,
-              zIndex: 40,
-              backgroundColor: "rgba(255, 255, 255, 0.98)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
+              zIndex: 99,
+              backgroundColor: "rgba(6,6,6,0.97)",
+              backdropFilter: "blur(24px)",
+              WebkitBackdropFilter: "blur(24px)",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              paddingTop: "80px",
-              paddingLeft: "24px",
-              paddingRight: "24px",
-              paddingBottom: "48px",
+              gap: "0",
+              padding: "80px 24px 48px",
             }}
-            className="lg:hidden"
           >
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "32px", width: "100%" }}>
+            {/* Logo inside mobile menu */}
+            <div style={{ marginBottom: "48px" }}>
+              <span
+                style={{
+                  display: "inline-flex",
+                  backgroundColor: "rgba(255,255,255,0.96)",
+                  borderRadius: "12px",
+                  padding: "8px 20px",
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/images/logo-oficial.png"
+                  alt="El Corrihuelo"
+                  style={{ height: "60px", width: "auto", display: "block" }}
+                />
+              </span>
+            </div>
+
+            {/* Nav Links */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "28px", width: "100%" }}>
               {NAV_LINKS.map((link, i) => (
                 <motion.a
                   key={link.name}
                   href={link.href}
-                  onClick={(e) => scrollToSection(e, link.href)}
-                  initial={{ opacity: 0, y: 20 }}
+                  onClick={(e) => scrollTo(e, link.href)}
+                  initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  exit={{ opacity: 0, y: 24 }}
+                  transition={{ delay: i * 0.08 }}
                   style={{
-                    fontFamily: "Cormorant Garamond, serif",
-                    fontSize: "2rem",
-                    color: "#2C3A2A",
+                    color: "#ffffff",
+                    fontSize: "1.6rem",
+                    fontWeight: 400,
                     textDecoration: "none",
-                    transition: "color 0.3s ease",
+                    fontFamily: "Cormorant Garamond, serif",
+                    letterSpacing: "0.05em",
+                    transition: "color 0.3s",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#C9A96E")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#2C3A2A")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#ffffff")}
                 >
                   {link.name}
                 </motion.a>
               ))}
 
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                style={{ width: "100%", marginTop: "16px", paddingTop: "24px", borderTop: "1px solid rgba(201, 169, 110, 0.3)" }}
+                exit={{ opacity: 0 }}
+                transition={{ delay: 0.35 }}
+                style={{
+                  width: "100%",
+                  paddingTop: "28px",
+                  marginTop: "8px",
+                  borderTop: "1px solid rgba(201,169,110,0.25)",
+                }}
               >
                 <a
                   href="#reserva"
-                  onClick={(e) => scrollToSection(e, "#reserva")}
+                  onClick={(e) => scrollTo(e, "#reserva")}
                   style={{
                     display: "block",
-                    width: "100%",
-                    backgroundColor: "#C9A96E",
-                    color: "#1a1a1a",
                     textAlign: "center",
+                    backgroundColor: "#C9A96E",
+                    color: "#111111",
                     fontWeight: 700,
-                    fontSize: "18px",
+                    fontSize: "16px",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
                     padding: "18px",
                     borderRadius: "9999px",
                     textDecoration: "none",
-                    boxShadow: "0 0 25px rgba(201, 169, 110, 0.4)",
                     fontFamily: "Inter, sans-serif",
+                    boxShadow: "0 0 28px rgba(201,169,110,0.45)",
                   }}
                 >
                   Reserva tu fecha
