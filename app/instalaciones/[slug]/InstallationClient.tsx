@@ -226,7 +226,7 @@ export default function InstallationPageClient({ item }: { item: Installation })
                   onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#C9A96E"; e.currentTarget.style.color = "#C9A96E"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(212,196,176,0.5)"; e.currentTarget.style.color = "#1C1A17"; }}
                 >
-                  {other.icon} {other.title}
+                  {other.title}
                 </Link>
               ))}
             </div>
