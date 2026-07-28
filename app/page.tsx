@@ -1,10 +1,7 @@
 import Hero from "@/components/Hero";
 import InstallationsGrid from "@/components/InstallationsGrid";
-import Moments from "@/components/Moments";
-import Events from "@/components/Events";
-import Features from "@/components/Features";
-import Includes from "@/components/Includes";
 import Gallery from "@/components/Gallery";
+import Features from "@/components/Features";
 import Testimonials from "@/components/Testimonials";
 import Location from "@/components/Location";
 import FAQ from "@/components/FAQ";
@@ -12,49 +9,42 @@ import Booking from "@/components/Booking";
 import CTAFinal from "@/components/CTAFinal";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Home() {
   return (
     <main>
       <Navbar />
+      <WhatsAppButton />
 
-      {/* 1. Impacto visual — Hero full-screen */}
+      {/* 1. Hero full-screen — primera impresión luxury */}
       <Hero />
 
-      {/* 2. Nuestros espacios — compact card grid linking to detail pages */}
+      {/* 2. Nuestras instalaciones — 9 espacios con fotos reales */}
       <InstallationsGrid />
 
-      {/* 3. Emociones y personas */}
-      <Moments />
-
-      {/* 4. Imaginando la celebración */}
-      <Events />
-
-      {/* 5. Lo que incluye */}
-      <Includes />
-
-      {/* 6. Galería inmersiva */}
+      {/* 3. Galería inmersiva — Master-Detail */}
       <Gallery />
 
-      {/* 7. Prueba Social */}
-      <Testimonials />
-
-      {/* 8. Confianza */}
+      {/* 4. Por qué elegirnos — 6 ventajas Glassmorphism */}
       <Features />
 
-      {/* 9. Ubicación */}
+      {/* 5. Lo que dicen — Testimonios carrusel */}
+      <Testimonials />
+
+      {/* 6. Ubicación y cómo llegar */}
       <Location />
 
-      {/* 10. FAQ */}
+      {/* 7. FAQ acordeón elegante */}
       <FAQ />
 
-      {/* 11. Reserva */}
+      {/* 8. Reserva — Glass premium */}
       <Booking />
 
-      {/* 12. CTA Final */}
+      {/* 9. CTA Final — Conversión */}
       <CTAFinal />
 
-      {/* 13. Footer */}
+      {/* 10. Footer con información completa */}
       <Footer />
     </main>
   );

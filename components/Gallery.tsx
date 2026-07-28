@@ -1,97 +1,128 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import Image from "next/image";
 import { Expand, X, ChevronLeft, ChevronRight } from "lucide-react";
 
-/* ── Data ── */
 const PHOTOS = [
-  { src: "/images/hero-salon.jpg", alt: "Gran salón decorado para evento" },
-  { src: "/images/terraza-piscina.jpg", alt: "Terraza exterior con piscina" },
-  { src: "/images/paella-grupo.jpg", alt: "Preparación de paella al aire libre" },
-  { src: "/images/baile-noche.jpg", alt: "Fiesta y baile nocturno" },
-  { src: "/images/mesa-gourmet.jpg", alt: "Mesa gourmet preparada" },
-  { src: "/images/guitarrista.jpg", alt: "Actuación en directo" },
-  { src: "/images/hero-jardin.jpg", alt: "Jardines y zonas verdes" },
-  { src: "/images/salon-decorado.jpg", alt: "Salón principal con iluminación cálida" },
-  { src: "/images/grupo-exterior.jpg", alt: "Grupo disfrutando en exteriores" },
-  { src: "/images/baile-dia.jpg", alt: "Fiesta y música durante el día" }
+  { src: "/images/terraza-piscina.jpg",  alt: "Terraza y piscina privada de El Corrihuelo al atardecer" },
+  { src: "/images/hero-salon.jpg",        alt: "Gran Salón preparado para una celebración elegante" },
+  { src: "/images/salon-decorado.jpg",    alt: "Salón decorado con iluminación cálida" },
+  { src: "/images/mesa-gourmet.jpg",      alt: "Mesa gourmet preparada con vajilla premium" },
+  { src: "/images/hero-jardin.jpg",       alt: "Jardines mediterráneos de El Corrihuelo" },
+  { src: "/images/flores-entrada.jpg",    alt: "Jardín en flor y zona de acceso a la finca" },
+  { src: "/images/paella-grupo.jpg",      alt: "Preparación de paella valenciana en zona exterior" },
+  { src: "/images/detalle-piscina.jpg",   alt: "Piscina privada con agua cristalina" },
+  { src: "/images/baile-noche.jpg",       alt: "Fiesta y música por la noche en El Corrihuelo" },
+  { src: "/images/guitarrista.jpg",       alt: "Actuación en directo con guitarrista" },
+  { src: "/images/grupo-exterior.jpg",    alt: "Grupo de invitados disfrutando de los jardines" },
+  { src: "/images/baile-dia.jpg",         alt: "Celebración y baile durante el día" },
 ];
 
-/* ── Fullscreen Lightbox ── */
-function Lightbox({ current, onClose, onPrev, onNext }: { current: number, onClose: () => void, onPrev: () => void, onNext: () => void }) {
-  useEffect(() => {
-    const fn = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") onPrev();
-      if (e.key === "ArrowRight") onNext();
-    };
-    window.addEventListener("keydown", fn);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", fn); document.body.style.overflow = ""; };
+function Lightbox({
+  index, onClose, onPrev, onNext, total
+}: { index: number; onClose: () => void; onPrev: () => void; onNext: () => void; total: number }) {
+  const handleKey = useCallback((e: KeyboardEvent) => {
+    if (e.key === "Escape") onClose();
+    if (e.key === "ArrowLeft") onPrev();
+    if (e.key === "ArrowRight") onNext();
   }, [onClose, onPrev, onNext]);
 
-  const img = PHOTOS[current];
+  useEffect(() => {
+    window.addEventListener("keydown", handleKey);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", handleKey); document.body.style.overflow = ""; };
+  }, [handleKey]);
+
+  const img = PHOTOS[index];
+  const touchStart = useRef<number | null>(null);
 
   return (
     <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.25 }}
       style={{
         position: "fixed", inset: 0, zIndex: 1000,
-        background: "rgba(4,4,4,0.97)",
-        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-        padding: "clamp(16px, 4vw, 48px)",
+        background: "rgba(3,3,3,0.97)",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
       }}
       onClick={onClose}
+      onTouchStart={(e) => { touchStart.current = e.touches[0].clientX; }}
+      onTouchEnd={(e) => {
+        if (touchStart.current === null) return;
+        const diff = touchStart.current - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) { diff > 0 ? onNext() : onPrev(); }
+        touchStart.current = null;
+      }}
     >
-      <button
-        onClick={(e) => { e.stopPropagation(); onClose(); }}
-        aria-label="Cerrar"
-        style={{
-          position: "absolute", top: "24px", right: "24px",
-          background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
-          borderRadius: "50%", width: "48px", height: "48px", color: "#fff",
-          display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
-          backdropFilter: "blur(12px)", zIndex: 10,
-        }}
-      >
-        <X size={20} />
+      {/* Close */}
+      <button onClick={(e) => { e.stopPropagation(); onClose(); }} aria-label="Cerrar galería" style={{
+        position: "absolute", top: "20px", right: "20px",
+        background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
+        borderRadius: "50%", width: "44px", height: "44px", color: "#fff",
+        display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+        backdropFilter: "blur(12px)", zIndex: 10,
+        transition: "background .2s",
+      }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.18)"} onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}>
+        <X size={18} />
       </button>
 
-      <motion.div
-        key={current}
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          position: "relative", width: "100%", maxWidth: "min(90vw, 1200px)",
-          maxHeight: "80vh", aspectRatio: "16/9", borderRadius: "16px", overflow: "hidden",
-        }}
-      >
-        <Image src={img.src} alt={img.alt} fill style={{ objectFit: "contain" }} quality={100} />
-      </motion.div>
-
-      {[{ fn: onPrev, pos: "left", icon: <ChevronLeft size={24} /> },
-        { fn: onNext, pos: "right", icon: <ChevronRight size={24} /> }].map(({ fn, pos, icon }) => (
-        <button
-          key={pos} onClick={(e) => { e.stopPropagation(); fn(); }}
+      {/* Image */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, scale: 0.97 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.97 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          onClick={(e) => e.stopPropagation()}
           style={{
-            position: "absolute", top: "50%", transform: "translateY(-50%)", [pos]: "clamp(12px, 3vw, 32px)",
-            background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
-            borderRadius: "50%", width: "56px", height: "56px", color: "#fff",
-            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
-            backdropFilter: "blur(12px)", zIndex: 10,
+            position: "relative",
+            width: "min(92vw, 1280px)",
+            maxHeight: "78vh",
+            aspectRatio: "16/9",
+            borderRadius: "14px",
+            overflow: "hidden",
           }}
         >
-          {icon}
-        </button>
-      ))}
-      <div style={{ position: "absolute", bottom: "32px", color: "rgba(255,255,255,0.6)", fontFamily: "Inter, sans-serif", fontSize: "13px" }}>
-        {current + 1} / {PHOTOS.length}
+          <Image src={img.src} alt={img.alt} fill style={{ objectFit: "contain" }} quality={95} sizes="92vw" />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Caption */}
+      <p style={{
+        fontFamily: "Inter, sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.55)",
+        marginTop: "20px", fontStyle: "italic",
+      }}>
+        {img.alt}
+      </p>
+
+      {/* Prev / Next */}
+      {[{ fn: onPrev, pos: "left", icon: <ChevronLeft size={22} />, label: "Anterior" },
+        { fn: onNext, pos: "right", icon: <ChevronRight size={22} />, label: "Siguiente" }]
+        .map(({ fn, pos, icon, label }) => (
+          <button key={pos} onClick={(e) => { e.stopPropagation(); fn(); }} aria-label={label} style={{
+            position: "absolute", top: "50%", transform: "translateY(-50%)",
+            [pos]: "clamp(10px, 3vw, 32px)",
+            background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: "50%", width: "52px", height: "52px", color: "#fff",
+            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+            backdropFilter: "blur(12px)", zIndex: 10, transition: "background .2s",
+          }}
+            onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.18)"}
+            onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
+          >{icon}</button>
+        ))}
+
+      {/* Counter */}
+      <div style={{
+        position: "absolute", bottom: "24px", left: "50%", transform: "translateX(-50%)",
+        fontFamily: "Inter, sans-serif", fontSize: "12px",
+        color: "rgba(255,255,255,0.45)", letterSpacing: "0.1em",
+      }}>
+        {index + 1} / {total}
       </div>
     </motion.div>
   );
@@ -99,60 +130,50 @@ function Lightbox({ current, onClose, onPrev, onNext }: { current: number, onClo
 
 export default function Gallery() {
   const [current, setCurrent] = useState(0);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightbox, setLightbox] = useState(false);
+  const thumbTrack = useRef<HTMLDivElement>(null);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-10%" });
-  const thumbScrollRef = useRef<HTMLDivElement>(null);
+  const touchStart = useRef<number | null>(null);
 
-  const mainImg = PHOTOS[current];
+  const handleNext = useCallback(() => setCurrent((p) => (p + 1) % PHOTOS.length), []);
+  const handlePrev = useCallback(() => setCurrent((p) => (p === 0 ? PHOTOS.length - 1 : p - 1)), []);
 
-  // Auto scroll thumbnails to keep active in view
+  // Keep active thumbnail in view
   useEffect(() => {
-    if (thumbScrollRef.current) {
-      const activeThumb = thumbScrollRef.current.children[current] as HTMLElement;
-      if (activeThumb) {
-        const scrollLeft = activeThumb.offsetLeft - (thumbScrollRef.current.clientWidth / 2) + (activeThumb.clientWidth / 2);
-        thumbScrollRef.current.scrollTo({ left: scrollLeft, behavior: "smooth" });
-      }
+    const track = thumbTrack.current;
+    if (!track) return;
+    const thumb = track.children[current] as HTMLElement;
+    if (thumb) {
+      const offset = thumb.offsetLeft - track.clientWidth / 2 + thumb.clientWidth / 2;
+      track.scrollTo({ left: offset, behavior: "smooth" });
     }
   }, [current]);
 
-  /* Touch swipe on main image */
-  const touchStart = useRef<number | null>(null);
-  const handleTouchStart = (e: React.TouchEvent) => { touchStart.current = e.touches[0].clientX; };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStart.current === null) return;
-    const diff = touchStart.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) diff > 0 ? handleNext() : handlePrev();
-    touchStart.current = null;
-  };
-
-  const handleNext = () => setCurrent((p) => (p + 1) % PHOTOS.length);
-  const handlePrev = () => setCurrent((p) => (p === 0 ? PHOTOS.length - 1 : p - 1));
+  const main = PHOTOS[current];
 
   return (
-    <section id="galeria" ref={ref} style={{ background: "#0a0a0a", padding: "120px 0" }}>
-      <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 24px" }}>
-        
+    <section id="galeria" ref={ref} style={{ background: "#0C0B09", padding: "clamp(80px, 12vw, 140px) 0" }}>
+      <div style={{ maxWidth: "1440px", margin: "0 auto", padding: "0 clamp(20px, 4vw, 48px)" }}>
+
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 28 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          style={{ textAlign: "center", marginBottom: "64px" }}
+          transition={{ duration: 0.85 }}
+          style={{ textAlign: "center", marginBottom: "clamp(40px, 7vw, 72px)" }}
         >
           <span style={{
             display: "block", fontFamily: "Inter, sans-serif", fontSize: "11px",
-            fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
+            fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase",
             color: "#C9A96E", marginBottom: "16px",
           }}>
             Galería
           </span>
           <h2 style={{
             fontFamily: "Playfair Display, Georgia, serif",
-            fontSize: "clamp(2rem, 5vw, 3.5rem)",
-            fontWeight: 700, color: "#fff", lineHeight: 1.1,
-            margin: "0 0 20px",
+            fontSize: "clamp(1.9rem, 5vw, 3.6rem)",
+            fontWeight: 700, color: "#fff", lineHeight: 1.08, margin: 0,
           }}>
             Espacios que <em style={{ fontStyle: "italic", color: "#C9A96E" }}>inspiran</em>
           </h2>
@@ -160,84 +181,117 @@ export default function Gallery() {
 
         {/* Master Image */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.97 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          style={{ position: "relative", width: "100%", aspectRatio: "16/9", maxHeight: "75vh", borderRadius: "24px", overflow: "hidden", marginBottom: "24px", background: "#111" }}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
+          style={{
+            position: "relative", width: "100%",
+            aspectRatio: "16/9", maxHeight: "76vh",
+            borderRadius: "clamp(16px, 2vw, 24px)", overflow: "hidden",
+            marginBottom: "clamp(16px, 2.5vw, 24px)", background: "#1a1a1a",
+          }}
+          onTouchStart={(e) => { touchStart.current = e.touches[0].clientX; }}
+          onTouchEnd={(e) => {
+            if (touchStart.current === null) return;
+            const d = touchStart.current - e.changedTouches[0].clientX;
+            if (Math.abs(d) > 50) d > 0 ? handleNext() : handlePrev();
+            touchStart.current = null;
+          }}
         >
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
-              initial={{ opacity: 0, scale: 1.05 }}
+              initial={{ opacity: 0, scale: 1.04 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               style={{ position: "absolute", inset: 0 }}
             >
-              <Image src={mainImg.src} alt={mainImg.alt} fill priority style={{ objectFit: "cover" }} sizes="100vw" quality={90} />
+              <Image
+                src={main.src} alt={main.alt} fill priority={current === 0}
+                style={{ objectFit: "cover" }} sizes="100vw" quality={90}
+              />
             </motion.div>
           </AnimatePresence>
 
-          {/* Overlays and Controls on Master */}
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 40%)", pointerEvents: "none" }} />
-          
-          <button
-            onClick={() => setLightboxOpen(true)}
-            aria-label="Ver a pantalla completa"
-            style={{
-              position: "absolute", top: "24px", right: "24px",
-              background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.2)",
-              borderRadius: "50%", width: "48px", height: "48px", color: "#fff",
-              display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
-              backdropFilter: "blur(12px)", transition: "all .3s"
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.7)"; e.currentTarget.style.transform = "scale(1.05)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.4)"; e.currentTarget.style.transform = "scale(1)"; }}
-          >
-            <Expand size={20} />
-          </button>
+          {/* Gradient overlay */}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 45%)", pointerEvents: "none" }} />
 
-          <div style={{ position: "absolute", bottom: "32px", left: "32px" }}>
-            <p style={{ fontFamily: "Playfair Display, serif", fontSize: "clamp(1.2rem, 3vw, 1.8rem)", color: "#fff", margin: 0, textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}>
-              {mainImg.alt}
+          {/* Caption bottom-left */}
+          <div style={{ position: "absolute", bottom: "clamp(20px, 3vw, 32px)", left: "clamp(20px, 3vw, 32px)", pointerEvents: "none" }}>
+            <p style={{
+              fontFamily: "Playfair Display, serif", fontStyle: "italic",
+              fontSize: "clamp(1rem, 2.5vw, 1.5rem)", color: "#fff",
+              margin: 0, textShadow: "0 2px 12px rgba(0,0,0,0.5)",
+            }}>
+              {main.alt}
             </p>
           </div>
+
+          {/* Fullscreen button */}
+          <button
+            onClick={() => setLightbox(true)}
+            aria-label="Ver en pantalla completa"
+            style={{
+              position: "absolute", top: "clamp(16px, 2vw, 24px)", right: "clamp(16px, 2vw, 24px)",
+              background: "rgba(0,0,0,0.4)", backdropFilter: "blur(12px)",
+              border: "1px solid rgba(255,255,255,0.2)", borderRadius: "50%",
+              width: "46px", height: "46px", color: "#fff",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", transition: "all .3s",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.7)"; e.currentTarget.style.transform = "scale(1.08)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,0,0,0.4)"; e.currentTarget.style.transform = "scale(1)"; }}
+          >
+            <Expand size={18} />
+          </button>
+
+          {/* Prev / Next on master */}
+          <button onClick={handlePrev} aria-label="Anterior" style={{ position: "absolute", left: "clamp(12px, 2vw, 20px)", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.35)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "50%", width: "44px", height: "44px", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all .3s" }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(0,0,0,0.65)"} onMouseLeave={(e) => e.currentTarget.style.background = "rgba(0,0,0,0.35)"}>
+            <ChevronLeft size={20} />
+          </button>
+          <button onClick={handleNext} aria-label="Siguiente" style={{ position: "absolute", right: "clamp(12px, 2vw, 20px)", top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.35)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "50%", width: "44px", height: "44px", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all .3s" }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(0,0,0,0.65)"} onMouseLeave={(e) => e.currentTarget.style.background = "rgba(0,0,0,0.35)"}>
+            <ChevronRight size={20} />
+          </button>
         </motion.div>
 
-        {/* Thumbnails Row */}
+        {/* Thumbnail Track */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.8, delay: 0.25 }}
         >
-          <div 
-            ref={thumbScrollRef}
-            style={{ 
-              display: "flex", gap: "12px", overflowX: "auto", paddingBottom: "16px",
-              scrollbarWidth: "none", msOverflowStyle: "none" // Hide scrollbar for clean look
+          <div
+            ref={thumbTrack}
+            role="tablist"
+            aria-label="Miniaturas de la galería"
+            style={{
+              display: "flex", gap: "clamp(8px, 1.5vw, 14px)",
+              overflowX: "auto", paddingBottom: "8px",
+              scrollbarWidth: "none",
             }}
           >
-            <style>{`div::-webkit-scrollbar { display: none; }`}</style>
+            <style>{`::-webkit-scrollbar { display: none; }`}</style>
             {PHOTOS.map((img, i) => (
               <button
                 key={i}
+                role="tab"
+                aria-selected={i === current}
                 onClick={() => setCurrent(i)}
-                aria-label={`Ver foto ${i + 1}`}
+                aria-label={`Ver: ${img.alt}`}
                 style={{
                   flexShrink: 0, position: "relative",
-                  width: "clamp(100px, 15vw, 160px)", aspectRatio: "16/9",
-                  borderRadius: "12px", overflow: "hidden",
+                  width: "clamp(80px, 12vw, 148px)", aspectRatio: "16/9",
+                  borderRadius: "10px", overflow: "hidden", padding: 0, cursor: "pointer",
                   border: i === current ? "2px solid #C9A96E" : "2px solid transparent",
-                  padding: 0, cursor: "pointer", background: "#111",
-                  transition: "all .3s ease",
-                  opacity: i === current ? 1 : 0.4
+                  opacity: i === current ? 1 : 0.38,
+                  background: "#1a1a1a",
+                  transition: "all .35s ease",
                 }}
-                onMouseEnter={(e) => { if (i !== current) e.currentTarget.style.opacity = "0.7"; }}
-                onMouseLeave={(e) => { if (i !== current) e.currentTarget.style.opacity = "0.4"; }}
+                onMouseEnter={(e) => { if (i !== current) e.currentTarget.style.opacity = "0.72"; }}
+                onMouseLeave={(e) => { if (i !== current) e.currentTarget.style.opacity = "0.38"; }}
               >
-                <Image src={img.src} alt={`Miniatura ${i+1}`} fill style={{ objectFit: "cover" }} sizes="160px" />
+                <Image src={img.src} alt={`Miniatura: ${img.alt}`} fill style={{ objectFit: "cover" }} sizes="148px" />
               </button>
             ))}
           </div>
@@ -246,8 +300,8 @@ export default function Gallery() {
       </div>
 
       <AnimatePresence>
-        {lightboxOpen && (
-          <Lightbox current={current} onClose={() => setLightboxOpen(false)} onPrev={handlePrev} onNext={handleNext} />
+        {lightbox && (
+          <Lightbox index={current} total={PHOTOS.length} onClose={() => setLightbox(false)} onPrev={handlePrev} onNext={handleNext} />
         )}
       </AnimatePresence>
     </section>

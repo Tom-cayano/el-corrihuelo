@@ -1,130 +1,104 @@
 "use client";
 
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { MessageCircle, Phone } from "lucide-react";
+
+const WA = "https://wa.me/34601167585?text=Hola%2C%20quiero%20reservar%20El%20Corrihuelo%20para%20una%20celebraci%C3%B3n.";
 
 export default function CTAFinal() {
   const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
 
   return (
     <section
       id="reservar"
       ref={ref}
-      className="relative overflow-hidden"
-      style={{ minHeight: "60vh" }}
+      style={{ position: "relative", overflow: "hidden", minHeight: "clamp(480px, 65vh, 700px)", display: "flex", alignItems: "center" }}
     >
-      {/* Parallax Background */}
+      {/* Parallax Bg */}
       <motion.div
-        style={{
-          y,
-          position: "absolute",
-          inset: "-12%",
-          backgroundImage: "url('/images/evento-grupo.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center 30%",
-        }}
         aria-hidden="true"
-      />
-
-      {/* Dark overlay */}
-      <div
-        className="absolute inset-0"
         style={{
-          background:
-            "linear-gradient(135deg, rgba(28,26,23,0.88) 0%, rgba(61,107,79,0.55) 60%, rgba(28,26,23,0.88) 100%)",
+          y, position: "absolute", inset: "-14%",
+          backgroundImage: "url('/images/hero-jardin.jpg')",
+          backgroundSize: "cover", backgroundPosition: "center",
         }}
       />
+      {/* Overlays */}
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(12,11,9,0.78)" }} />
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(201,169,110,0.06) 0%, transparent 65%)" }} />
 
-      {/* Gold vignette */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 80% at 50% 50%, rgba(201,169,110,0.06) 0%, transparent 70%)",
-        }}
-      />
-
-      {/* Content */}
-      <div
-        className="relative z-10 section-padding flex flex-col items-center justify-center text-center"
-        style={{ minHeight: "60vh" }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1 }}
-          className="max-w-3xl mx-auto px-6"
-        >
-          <div className="inline-flex items-center gap-3 mb-8">
-            <span className="h-px w-12" style={{ background: "var(--gold)" }} />
-            <span
-              className="text-xs font-semibold tracking-[0.25em] uppercase"
-              style={{ color: "var(--gold-light)", fontFamily: "Inter, sans-serif" }}
-            >
-              ¿Lista tu celebración?
-            </span>
-            <span className="h-px w-12" style={{ background: "var(--gold)" }} />
+      <div style={{ position: "relative", zIndex: 10, width: "100%", padding: "clamp(64px, 10vw, 120px) clamp(20px, 5vw, 60px)", textAlign: "center" }}>
+        <div style={{ maxWidth: "720px", margin: "0 auto" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "12px", marginBottom: "clamp(20px, 3vw, 32px)" }}>
+            <span style={{ height: "1px", width: "40px", background: "#C9A96E", display: "block" }} />
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "11px", fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase", color: "#C9A96E" }}>¿Lista tu celebración?</span>
+            <span style={{ height: "1px", width: "40px", background: "#C9A96E", display: "block" }} />
           </div>
 
-          <h2
-            className="font-serif text-white mb-6"
-            style={{
-              fontSize: "clamp(2rem, 5vw, 3.75rem)",
-              lineHeight: 1.1,
-              letterSpacing: "-0.02em",
-            }}
-          >
+          <h2 style={{
+            fontFamily: "Playfair Display, Georgia, serif",
+            fontSize: "clamp(2.2rem, 6vw, 4.5rem)",
+            fontWeight: 400, color: "#fff", lineHeight: 1.05,
+            margin: "0 0 clamp(16px, 3vw, 24px)",
+            letterSpacing: "-0.01em",
+          }}>
             Tu próxima celebración{" "}
-            <em className="italic" style={{ color: "var(--gold-light)" }}>
-              te espera
-            </em>
-            <br />
-            en El Corrihuelo
+            <em style={{ fontStyle: "italic", color: "#C9A96E", fontWeight: 500 }}>te espera</em>
+            {" "}en El Corrihuelo
           </h2>
 
-          <p
-            className="text-lg text-white/80 mb-12 leading-relaxed"
-            style={{ fontFamily: "Inter, sans-serif", fontWeight: 300 }}
-          >
-            No esperes más. Escríbenos hoy, verificamos disponibilidad en
-            minutos y juntos hacemos que tu celebración sea perfecta.
+          <p style={{
+            fontFamily: "Inter, sans-serif", fontSize: "clamp(15px, 2.2vw, 18px)",
+            color: "rgba(255,255,255,0.75)", fontWeight: 300, lineHeight: 1.7,
+            margin: "0 auto clamp(36px, 5vw, 56px)", maxWidth: "560px",
+          }}>
+            Escríbenos hoy, verificamos disponibilidad en minutos y juntos hacemos que tu celebración sea perfecta.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="cta-btns" style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "center", justifyContent: "center" }}>
+            <style>{`@media(min-width:540px){ .cta-btns { flex-direction: row !important; } }`}</style>
             <a
-              href="https://wa.me/34601167585?text=Hola!%20Quiero%20reservar%20El%20Corrihuelo%20para%20una%20celebración"
+              href={WA}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-whatsapp text-base px-8 py-4"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "12px",
+                background: "#C9A96E", color: "#111",
+                padding: "18px 40px", borderRadius: "9999px",
+                fontFamily: "Inter, sans-serif", fontSize: "13px", fontWeight: 700,
+                letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none",
+                boxShadow: "0 0 32px rgba(201,169,110,0.32)",
+                transition: "all .35s ease",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "#d4b278"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "#C9A96E"; e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              <MessageCircle size={22} />
-              Hablar por WhatsApp
+              <MessageCircle size={18} /> Hablar por WhatsApp
             </a>
             <a
-              href="tel:601167585"
-              className="flex items-center gap-3 px-8 py-4 rounded-full text-base font-semibold border-2 text-white transition-all duration-300 hover:bg-white/10"
-              style={{ borderColor: "rgba(255,255,255,0.5)", fontFamily: "Inter, sans-serif" }}
+              href="tel:+34601167585"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "12px",
+                color: "#fff", padding: "17px 36px", borderRadius: "9999px",
+                fontFamily: "Inter, sans-serif", fontSize: "13px", fontWeight: 700,
+                letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none",
+                border: "1px solid rgba(255,255,255,0.22)",
+                transition: "all .35s ease",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.12)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; }}
             >
-              <Phone size={20} />
-              601 167 585
+              <Phone size={18} /> 601 167 585
             </a>
           </div>
 
-          <p
-            className="mt-8 text-sm text-white/50"
-            style={{ fontFamily: "Inter, sans-serif" }}
-          >
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "12px", color: "rgba(255,255,255,0.38)", fontWeight: 300, marginTop: "clamp(20px, 3vw, 28px)" }}>
             Respondemos en menos de 24 horas · Sin compromiso
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

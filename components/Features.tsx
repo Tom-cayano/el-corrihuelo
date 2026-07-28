@@ -8,33 +8,33 @@ const FEATURES = [
   {
     icon: ShieldCheck,
     title: "Exclusividad Total",
-    desc: "Solo un evento por día. La finca entera es tuya durante 12 horas para que disfrutes sin prisas ni personas ajenas a tu celebración."
+    desc: "Un solo evento por día. La finca al completo es tuya durante 12 horas. Sin extraños, sin interrupciones, solo tu grupo.",
   },
   {
     icon: Leaf,
     title: "Entorno Natural",
-    desc: "Aislados del ruido urbano pero a pocos minutos de Murcia. Disfruta del aire puro, vegetación mediterránea y cielos estrellados."
+    desc: "Cinco mil metros cuadrados de naturaleza mediterránea a pocos minutos de Murcia. Silencio, aire limpio y cielos estrellados.",
   },
   {
     icon: UtensilsCrossed,
     title: "Libertad Gastronómica",
-    desc: "Tú decides: utiliza nuestras barbacoas y cocinas para hacer tu propia comida, o contrata un servicio de catering externo sin comisiones."
+    desc: "Cocina tú mismo en nuestra zona gourmet, usa la barbacoa exterior o trae el servicio de catering que prefieras. Sin restricciones.",
   },
   {
     icon: Sparkles,
     title: "Instalaciones Premium",
-    desc: "Desde salones completamente climatizados hasta equipos de sonido e iluminación profesional. Todo cuidado al mínimo detalle."
+    desc: "Piscina, salón climatizado, karaoke profesional, ping pong, futbolín y parque infantil. Todo en perfecto estado.",
   },
   {
     icon: UserCheck,
-    title: "Atención Cercana",
-    desc: "Trato directo con la propiedad. Te ayudamos en la planificación, distribución del espacio y resolución de dudas sin intermediarios."
+    title: "Trato Directo",
+    desc: "Hablas directamente con la propiedad. Te asesoramos sin intermediarios para que cada detalle de tu evento sea perfecto.",
   },
   {
     icon: Lock,
     title: "Privacidad Garantizada",
-    desc: "Finca perimetrada y segura. Perfecta para que los niños jueguen en libertad mientras los adultos disfrutan con total tranquilidad."
-  }
+    desc: "Finca totalmente vallada y segura. Los niños juegan libres mientras los adultos disfrutan con total tranquilidad.",
+  },
 ];
 
 export default function Features() {
@@ -42,82 +42,96 @@ export default function Features() {
   const isInView = useInView(ref, { once: true, margin: "-10%" });
 
   return (
-    <section id="ventajas" ref={ref} style={{ background: "#0a0a0a", padding: "140px 0" }}>
-      <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 24px" }}>
-        
+    <section id="ventajas" ref={ref} style={{ background: "#0C0B09", padding: "clamp(80px, 12vw, 140px) 0" }}>
+      <div style={{ maxWidth: "1440px", margin: "0 auto", padding: "0 clamp(20px, 4vw, 48px)" }}>
+
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 28 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          style={{ textAlign: "center", marginBottom: "80px" }}
+          transition={{ duration: 0.85 }}
+          style={{ textAlign: "center", marginBottom: "clamp(56px, 9vw, 96px)" }}
         >
           <span style={{
             display: "block", fontFamily: "Inter, sans-serif", fontSize: "11px",
-            fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase",
+            fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase",
             color: "#C9A96E", marginBottom: "16px",
           }}>
             Por qué elegirnos
           </span>
           <h2 style={{
             fontFamily: "Playfair Display, Georgia, serif",
-            fontSize: "clamp(2rem, 5vw, 3.5rem)",
-            fontWeight: 700, color: "#fff", lineHeight: 1.1,
-            margin: "0 0 20px",
+            fontSize: "clamp(1.9rem, 5vw, 3.6rem)",
+            fontWeight: 700, color: "#fff", lineHeight: 1.08,
+            margin: "0 0 18px",
           }}>
             La diferencia está en <em style={{ fontStyle: "italic", color: "#C9A96E" }}>los detalles</em>
           </h2>
+          <p style={{
+            fontFamily: "Inter, sans-serif", fontSize: "clamp(15px, 2vw, 17px)",
+            color: "rgba(255,255,255,0.6)", fontWeight: 300, lineHeight: 1.75,
+            maxWidth: "520px", margin: "0 auto",
+          }}>
+            No somos una sala de alquiler genérica. Somos el espacio exclusivo que hace que tu celebración sea exactamente como la imaginabas.
+          </p>
         </motion.div>
 
-        {/* Features Grid */}
-        <div className="feat-grid" style={{ display: "grid", gap: "40px" }}>
-          <style>{`
-            .feat-grid { grid-template-columns: 1fr; }
-            @media (min-width: 640px) { .feat-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; } }
-            @media (min-width: 1024px) { .feat-grid { grid-template-columns: repeat(3, 1fr); gap: 48px; } }
-          `}</style>
-
+        {/* Grid */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 340px), 1fr))",
+          gap: "clamp(20px, 3vw, 36px)",
+        }}>
           {FEATURES.map((feat, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 36 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.85, delay: i * 0.09, ease: [0.22, 1, 0.36, 1] }}
               className="feat-card"
               style={{
-                background: "rgba(255,255,255,0.03)",
-                backdropFilter: "blur(16px)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: "24px",
-                padding: "clamp(40px, 4vw, 56px) clamp(32px, 3vw, 40px)",
+                background: "rgba(255,255,255,0.035)",
+                backdropFilter: "blur(20px)",
+                WebkitBackdropFilter: "blur(20px)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: "clamp(18px, 2vw, 28px)",
+                padding: "clamp(36px, 4vw, 56px) clamp(28px, 3vw, 44px)",
                 display: "flex", flexDirection: "column", alignItems: "flex-start",
-                transition: "all .4s ease",
+                transition: "all .45s ease",
               }}
             >
               <style>{`
-                .feat-card:hover { transform: translateY(-8px); background: rgba(255,255,255,0.06) !important; border-color: rgba(201,169,110,0.3) !important; }
+                .feat-card:hover {
+                  transform: translateY(-10px);
+                  background: rgba(255,255,255,0.055) !important;
+                  border-color: rgba(201,169,110,0.28) !important;
+                }
               `}</style>
-              
+
+              {/* Icon */}
               <div style={{
-                width: "64px", height: "64px", borderRadius: "16px",
+                width: "clamp(52px, 6vw, 68px)", height: "clamp(52px, 6vw, 68px)",
+                borderRadius: "16px",
                 background: "rgba(201,169,110,0.1)",
-                border: "1px solid rgba(201,169,110,0.2)",
+                border: "1px solid rgba(201,169,110,0.18)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: "32px",
+                marginBottom: "clamp(24px, 3vw, 36px)",
               }}>
-                <feat.icon size={28} color="#C9A96E" strokeWidth={1.5} />
+                <feat.icon size={26} color="#C9A96E" strokeWidth={1.5} />
               </div>
 
               <h3 style={{
-                fontFamily: "Playfair Display, serif", fontSize: "1.5rem", fontWeight: 700,
-                color: "#fff", margin: "0 0 16px", lineHeight: 1.2,
+                fontFamily: "Playfair Display, serif",
+                fontSize: "clamp(1.25rem, 2.5vw, 1.55rem)",
+                fontWeight: 700, color: "#fff",
+                margin: "0 0 clamp(12px, 1.5vw, 16px)", lineHeight: 1.2,
               }}>
                 {feat.title}
               </h3>
-              
+
               <p style={{
-                fontFamily: "Inter, sans-serif", fontSize: "15px", color: "rgba(255,255,255,0.65)",
-                lineHeight: 1.7, fontWeight: 300, margin: 0,
+                fontFamily: "Inter, sans-serif", fontSize: "clamp(14px, 1.6vw, 15.5px)",
+                color: "rgba(255,255,255,0.62)", lineHeight: 1.75, fontWeight: 300, margin: 0,
               }}>
                 {feat.desc}
               </p>
