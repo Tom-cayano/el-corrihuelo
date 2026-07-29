@@ -53,7 +53,10 @@ function Lightbox({
       onTouchEnd={(e) => {
         if (touchStart.current === null) return;
         const diff = touchStart.current - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) { diff > 0 ? onNext() : onPrev(); }
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) onNext();
+          else onPrev();
+        }
         touchStart.current = null;
       }}
     >
@@ -194,7 +197,10 @@ export default function Gallery() {
           onTouchEnd={(e) => {
             if (touchStart.current === null) return;
             const d = touchStart.current - e.changedTouches[0].clientX;
-            if (Math.abs(d) > 50) d > 0 ? handleNext() : handlePrev();
+            if (Math.abs(d) > 50) {
+              if (d > 0) handleNext();
+              else handlePrev();
+            }
             touchStart.current = null;
           }}
         >

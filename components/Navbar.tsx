@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import Link from "next/link";
 
 const NAV_LINKS = [
   { label: "Nosotros",      href: "#discover" },
@@ -58,32 +57,8 @@ export default function Navbar() {
           justifyContent: "space-between", gap: "24px",
         }}>
 
-          {/* ── LOGO — blend-mode makes white bg invisible on dark surface ── */}
-          <a
-            href="#inicio"
-            onClick={(e) => smoothScroll(e, "#inicio")}
-            aria-label="El Corrihuelo — Inicio"
-            style={{ flexShrink: 0, textDecoration: "none", display: "flex", alignItems: "center" }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/logo-oficial.png"
-              alt="El Corrihuelo"
-              style={{
-                height: scrolled ? "44px" : "56px",
-                width: "auto",
-                display: "block",
-                objectFit: "contain",
-                transition: "height .4s ease",
-                /* multiply: white bg blends into dark surface */
-                mixBlendMode: "screen",
-                filter: "brightness(0.95)",
-              }}
-            />
-          </a>
-
           {/* ── DESKTOP NAV ── */}
-          <nav className="hidden lg:flex" style={{ alignItems: "center", gap: "clamp(20px, 2.5vw, 36px)" }} aria-label="Menú principal">
+          <nav className="hidden lg:flex" style={{ alignItems: "center", gap: "clamp(20px, 2.5vw, 36px)", width: "100%", justifyContent: "flex-start" }} aria-label="Menú principal">
             {NAV_LINKS.map(({ label, href }) => (
               <a
                 key={label}
@@ -160,17 +135,7 @@ export default function Navbar() {
               gap: "0",
             }}
           >
-            {/* Logo in mobile menu */}
-            <div style={{ marginBottom: "48px", opacity: 0.9 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/logo-oficial.png"
-                alt="El Corrihuelo"
-                style={{ height: "60px", width: "auto", mixBlendMode: "screen" }}
-              />
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0", width: "100%" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0", width: "100%", marginTop: "20px" }}>
               {NAV_LINKS.map(({ label, href }, i) => (
                 <motion.a
                   key={label}

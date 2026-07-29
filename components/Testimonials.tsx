@@ -123,7 +123,7 @@ export default function Testimonials() {
                   margin: "0 0 clamp(28px, 4vw, 44px)",
                   quotes: "none",
                 }}>
-                  "{r.text}"
+                  &quot;{r.text}&quot;
                 </blockquote>
 
                 {/* Author */}

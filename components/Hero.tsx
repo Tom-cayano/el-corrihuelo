@@ -1,21 +1,25 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { ArrowDown } from "lucide-react";
-
-const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-  e.preventDefault();
-  const el = document.querySelector(id);
-  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 82, behavior: "smooth" });
-};
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollY } = useScroll();
-  const imgY = useTransform(scrollY, [0, 900], [0, 320]);
-  const contentOpacity = useTransform(scrollY, [0, 500], [1, 0]);
+  const imgY = useTransform(scrollY, [0, 1000], [0, 250]);
+  const contentOpacity = useTransform(scrollY, [0, 400], [1, 0]);
+  const contentY = useTransform(scrollY, [0, 400], [0, 40]);
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, target: string) => {
+    e.preventDefault();
+    const el = document.querySelector(target);
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
 
   return (
     <section
@@ -24,7 +28,7 @@ export default function Hero() {
       style={{
         position: "relative",
         height: "100dvh",
-        minHeight: "640px",
+        minHeight: "700px",
         overflow: "hidden",
         display: "flex",
         alignItems: "center",
@@ -43,7 +47,7 @@ export default function Hero() {
       >
         <Image
           src="/images/real/real-52.webp"
-          alt="Vista de la terraza y piscina privada de El Corrihuelo en Murcia"
+          alt="Piscina y terraza de El Corrihuelo, finca de celebraciones premium en Murcia"
           fill
           priority
           quality={95}
@@ -52,10 +56,9 @@ export default function Hero() {
         />
       </motion.div>
 
-      {/* ── Multi-layer Dark Overlays ── */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.52)" }} />
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.10) 45%, rgba(0,0,0,0.65) 100%)" }} />
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 100% 80% at 50% 50%, transparent 30%, rgba(0,0,0,0.25) 100%)" }} />
+      {/* ── Soft Dark Overlay ── */}
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.4)" }} />
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.5) 100%)" }} />
 
       {/* ── Content ── */}
       <motion.div
@@ -65,121 +68,118 @@ export default function Hero() {
           textAlign: "center",
           padding: "0 clamp(20px, 5vw, 60px)",
           width: "100%",
-          maxWidth: "960px",
-          marginTop: "clamp(60px, 10vw, 100px)",
+          maxWidth: "1000px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
           opacity: contentOpacity,
+          y: contentY,
         }}
       >
-        {/* Eyebrow */}
-        <motion.span
-          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-          style={{
-            display: "block",
-            fontFamily: "Inter, sans-serif",
-            fontSize: "clamp(10px, 1.5vw, 12px)",
-            fontWeight: 700,
-            letterSpacing: "0.28em",
-            textTransform: "uppercase",
-            color: "#C9A96E",
-            marginBottom: "clamp(16px, 3vw, 28px)",
-          }}
+        {/* LOGO */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+          style={{ marginBottom: "clamp(40px, 6vw, 60px)" }}
         >
-          Cabezo de la Plata · Murcia
-        </motion.span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/logo-transparente.png"
+            alt="El Corrihuelo"
+            style={{
+              height: "clamp(120px, 18vw, 180px)",
+              width: "auto",
+              objectFit: "contain",
+              filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.45))", // Subtle shadow for elegance
+            }}
+          />
+        </motion.div>
 
         {/* Main Headline */}
         <motion.h1
-          initial={{ opacity: 0, y: 40, filter: "blur(12px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-          style={{
-            fontFamily: "Playfair Display, Georgia, serif",
-            fontSize: "clamp(2.6rem, 7.5vw, 6rem)",
-            fontWeight: 400,
-            color: "#fff",
-            lineHeight: 1.05,
-            letterSpacing: "-0.01em",
-            margin: "0 0 clamp(16px, 3vw, 28px)",
-            textShadow: "0 8px 40px rgba(0,0,0,0.6)",
-          }}
-        >
-          El espacio perfecto<br />
-          para <em style={{ fontStyle: "italic", color: "#C9A96E", fontWeight: 500 }}>celebrar la vida</em>
-        </motion.h1>
-
-        {/* Sub */}
-        <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.55 }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+          style={{
+            fontFamily: "Playfair Display, Georgia, serif",
+            fontSize: "clamp(2rem, 4.5vw, 4.2rem)",
+            fontWeight: 400,
+            color: "#fff",
+            lineHeight: 1.1,
+            letterSpacing: "0.02em",
+            margin: "0 0 clamp(16px, 3vw, 24px)",
+            textShadow: "0 4px 24px rgba(0,0,0,0.6)",
+          }}
+        >
+          El lujo de celebrar <br />
+          <em style={{ fontStyle: "italic", color: "#C9A96E" }}>en plena naturaleza</em>
+        </motion.h1>
+
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
           style={{
             fontFamily: "Inter, sans-serif",
-            fontSize: "clamp(15px, 2.2vw, 19px)",
-            color: "rgba(255,255,255,0.82)",
+            fontSize: "clamp(14px, 2vw, 17px)",
+            color: "rgba(255,255,255,0.85)",
             fontWeight: 300,
-            lineHeight: 1.65,
-            maxWidth: "580px",
-            margin: "0 auto clamp(36px, 6vw, 56px)",
+            lineHeight: 1.7,
+            maxWidth: "600px",
+            margin: "0 auto clamp(40px, 6vw, 60px)",
+            letterSpacing: "0.05em",
             textShadow: "0 2px 12px rgba(0,0,0,0.5)",
           }}
         >
-          Reserva la finca completa en exclusividad. Piscina privada, salones, barbacoa, karaoke y jardines de ensueño.
+          Reserva la finca completa en exclusividad para tu evento privado.
         </motion.p>
 
         {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.75 }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
+          style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "center" }}
         >
-          <div className="hero-btns" style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "center", justifyContent: "center" }}>
-            <style>{`
-              @media(min-width:540px){ .hero-btns { flex-direction: row !important; gap: 20px !important; } }
-            `}</style>
+          <a
+            href="#reserva"
+            onClick={(e) => scrollToSection(e, "#reserva")}
+            style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              background: "#C9A96E", color: "#111",
+              padding: "16px 48px", borderRadius: "2px",
+              fontFamily: "Inter, sans-serif", fontSize: "12px",
+              fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase",
+              textDecoration: "none", minWidth: "200px",
+              transition: "all .4s cubic-bezier(0.22, 1, 0.36, 1)",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#000"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "#C9A96E"; e.currentTarget.style.color = "#111"; }}
+          >
+            Reservar
+          </a>
 
-            <a
-              href="#reserva"
-              onClick={(e) => scrollToSection(e, "#reserva")}
-              id="hero-cta-reservar"
-              style={{
-                display: "inline-flex", alignItems: "center", justifyContent: "center",
-                background: "#C9A96E", color: "#111",
-                padding: "18px 44px", borderRadius: "9999px",
-                fontFamily: "Inter, sans-serif", fontSize: "clamp(12px, 1.5vw, 13px)",
-                fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase",
-                textDecoration: "none", minWidth: "180px",
-                boxShadow: "0 0 32px rgba(201,169,110,0.35)",
-                transition: "all .35s cubic-bezier(0.22, 1, 0.36, 1)",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "#d4b278"; e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(201,169,110,0.5)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "#C9A96E"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 0 32px rgba(201,169,110,0.35)"; }}
-            >
-              Reservar
-            </a>
-
-            <a
-              href="#instalaciones"
-              onClick={(e) => scrollToSection(e, "#instalaciones")}
-              id="hero-cta-instalaciones"
-              style={{
-                display: "inline-flex", alignItems: "center", justifyContent: "center",
-                background: "rgba(255,255,255,0.07)",
-                backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
-                border: "1px solid rgba(255,255,255,0.22)", color: "#fff",
-                padding: "17px 44px", borderRadius: "9999px",
-                fontFamily: "Inter, sans-serif", fontSize: "clamp(12px, 1.5vw, 13px)",
-                fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase",
-                textDecoration: "none", minWidth: "180px",
-                transition: "all .35s cubic-bezier(0.22, 1, 0.36, 1)",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.16)"; e.currentTarget.style.transform = "translateY(-3px)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.07)"; e.currentTarget.style.transform = "translateY(0)"; }}
-            >
-              Ver Instalaciones
-            </a>
-          </div>
+          <a
+            href="#instalaciones"
+            onClick={(e) => scrollToSection(e, "#instalaciones")}
+            style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              background: "transparent", color: "#fff",
+              border: "1px solid rgba(255,255,255,0.4)",
+              padding: "16px 48px", borderRadius: "2px",
+              fontFamily: "Inter, sans-serif", fontSize: "12px",
+              fontWeight: 400, letterSpacing: "0.2em", textTransform: "uppercase",
+              textDecoration: "none", minWidth: "200px",
+              transition: "all .4s cubic-bezier(0.22, 1, 0.36, 1)",
+              backdropFilter: "blur(4px)",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.borderColor = "#fff"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)"; }}
+          >
+            Ver Instalaciones
+          </a>
         </motion.div>
       </motion.div>
 
