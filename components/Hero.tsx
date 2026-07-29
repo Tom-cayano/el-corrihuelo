@@ -89,31 +89,24 @@ export default function Hero() {
             gap: "24px",
           }}
         >
-          {/* Nueva Ilustración: Grabado a mano de Finca y Olivo */}
-          <div
+          {/* Ilustración Original de la Casa y Olivo */}
+          <img
+            src="/images/logo-house.png"
+            alt="Ilustración El Corrihuelo"
             style={{
-              width: "clamp(120px, 18vw, 160px)",
-              height: "clamp(120px, 18vw, 160px)",
-              background: "linear-gradient(135deg, #FFFBF0 0%, #E5D0A1 60%, #C9A96E 100%)",
-              WebkitMaskImage: "url(/images/logo-illustration.png)",
-              WebkitMaskSize: "contain",
-              WebkitMaskRepeat: "no-repeat",
-              WebkitMaskPosition: "center",
-              maskImage: "url(/images/logo-illustration.png)",
-              maskSize: "contain",
-              maskRepeat: "no-repeat",
-              maskPosition: "center",
-              filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.65))",
+              width: "clamp(180px, 25vw, 220px)",
+              height: "auto",
+              objectFit: "contain",
+              filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.2))",
             }}
-            aria-hidden="true"
           />
 
-          {/* Tipografía Original Restaurada */}
+          {/* Tipografía Original con Degradado Dorado Específico */}
           <div
             style={{
               width: "clamp(220px, 32vw, 360px)",
               height: "clamp(45px, 6vw, 70px)",
-              background: "linear-gradient(90deg, #FFFBF0 0%, #E5D0A1 50%, #C9A96E 100%)",
+              background: "linear-gradient(to bottom, #FFF8E6 0%, #E6C77A 50%, #B98C3F 100%)",
               WebkitMaskImage: "url(/images/logo-text-cropped.png)",
               WebkitMaskSize: "contain",
               WebkitMaskRepeat: "no-repeat",
@@ -122,9 +115,10 @@ export default function Hero() {
               maskSize: "contain",
               maskRepeat: "no-repeat",
               maskPosition: "center",
-              // El drop-shadow con el mismo color del degradado añade un ~5% de grosor a las letras
-              // El contrast(1.2) aumenta la nitidez
-              filter: "drop-shadow(0 0 1px #E5D0A1) drop-shadow(0 4px 12px rgba(0,0,0,0.65)) contrast(1.2)",
+              // El drop-shadow con el mismo color del degradado (#E6C77A) añade el grosor de 5%
+              // contrast(1.25) aumenta la nitidez
+              // drop-shadow negro con 3px blur y 20% de opacidad para visibilidad
+              filter: "drop-shadow(0 0 1px #E6C77A) drop-shadow(0 2px 3px rgba(0,0,0,0.2)) contrast(1.25)",
             }}
             aria-label="El Corrihuelo - Casa Vacacional & Celebraciones"
             role="img"
