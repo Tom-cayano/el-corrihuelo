@@ -76,30 +76,57 @@ export default function Hero() {
           y: contentY,
         }}
       >
-        {/* LOGO CON DEGRADADO DORADO PREMIUM */}
+        {/* LOGO COMPUESTO PREMIUM */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-          style={{ marginBottom: "clamp(32px, 5vw, 48px)" }}
+          style={{
+            marginBottom: "clamp(32px, 5vw, 48px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "24px",
+          }}
         >
+          {/* Nueva Ilustración: Grabado a mano de Finca y Olivo */}
           <div
             style={{
-              width: "clamp(180px, 25vw, 260px)",
-              height: "clamp(70px, 10vw, 100px)",
-              margin: "0 auto",
-              background: "linear-gradient(135deg, #FFFBF0 0%, #E5D0A1 40%, #C9A96E 100%)",
-              WebkitMaskImage: "url(/images/logo-transparente.png)",
+              width: "clamp(120px, 18vw, 160px)",
+              height: "clamp(120px, 18vw, 160px)",
+              background: "linear-gradient(135deg, #FFFBF0 0%, #E5D0A1 60%, #C9A96E 100%)",
+              WebkitMaskImage: "url(/images/logo-illustration.png)",
               WebkitMaskSize: "contain",
               WebkitMaskRepeat: "no-repeat",
               WebkitMaskPosition: "center",
-              maskImage: "url(/images/logo-transparente.png)",
+              maskImage: "url(/images/logo-illustration.png)",
               maskSize: "contain",
               maskRepeat: "no-repeat",
               maskPosition: "center",
               filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.65))",
             }}
-            aria-label="El Corrihuelo"
+            aria-hidden="true"
+          />
+
+          {/* Tipografía Original Restaurada */}
+          <div
+            style={{
+              width: "clamp(220px, 32vw, 360px)",
+              height: "clamp(45px, 6vw, 70px)",
+              background: "linear-gradient(90deg, #FFFBF0 0%, #E5D0A1 50%, #C9A96E 100%)",
+              WebkitMaskImage: "url(/images/logo-text-cropped.png)",
+              WebkitMaskSize: "contain",
+              WebkitMaskRepeat: "no-repeat",
+              WebkitMaskPosition: "center",
+              maskImage: "url(/images/logo-text-cropped.png)",
+              maskSize: "contain",
+              maskRepeat: "no-repeat",
+              maskPosition: "center",
+              // El drop-shadow con el mismo color del degradado añade un ~5% de grosor a las letras
+              // El contrast(1.2) aumenta la nitidez
+              filter: "drop-shadow(0 0 1px #E5D0A1) drop-shadow(0 4px 12px rgba(0,0,0,0.65)) contrast(1.2)",
+            }}
+            aria-label="El Corrihuelo - Casa Vacacional & Celebraciones"
             role="img"
           />
         </motion.div>
