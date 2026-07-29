@@ -7,23 +7,10 @@ import { useRef } from "react";
 import { ArrowRight, Check, Users } from "lucide-react";
 import { INSTALLATIONS_DATA } from "@/lib/installations";
 
-// Map slugs without persons to use a landscape/nature shot where applicable
-const CARD_IMAGES: Record<string, string> = {
-  piscina:        "/images/terraza-piscina.jpg",
-  salon:          "/images/salon-decorado.jpg",
-  "zona-gourmet": "/images/mesa-gourmet.jpg",
-  barbacoa:       "/images/paella2.jpg",
-  jardines:       "/images/hero-jardin.jpg",
-  "parque-infantil": "/images/flores-entrada.jpg",
-  karaoke:        "/images/guitarrista.jpg",
-  "ping-pong":    "/images/baile-dia.jpg",
-  futbolin:       "/images/hero-salon.jpg",
-};
-
 function InstallationCard({ item, index }: { item: (typeof INSTALLATIONS_DATA)[0]; index: number }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-8%" });
-  const imgSrc = CARD_IMAGES[item.slug] ?? item.heroImage;
+  const imgSrc = item.heroImage;
 
   return (
     <motion.article

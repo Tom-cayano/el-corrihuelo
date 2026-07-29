@@ -42,8 +42,8 @@ export default function Hero() {
         aria-hidden="true"
       >
         <Image
-          src="/images/terraza-piscina.jpg"
-          alt="Vista aérea de la terraza y piscina privada de El Corrihuelo en Murcia"
+          src="/images/real/real-52.webp"
+          alt="Vista de la terraza y piscina privada de El Corrihuelo en Murcia"
           fill
           priority
           quality={95}

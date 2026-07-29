@@ -6,18 +6,18 @@ import Image from "next/image";
 import { Expand, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const PHOTOS = [
-  { src: "/images/terraza-piscina.jpg",  alt: "Terraza y piscina privada de El Corrihuelo al atardecer" },
-  { src: "/images/hero-salon.jpg",        alt: "Gran Salón preparado para una celebración elegante" },
-  { src: "/images/salon-decorado.jpg",    alt: "Salón decorado con iluminación cálida" },
-  { src: "/images/mesa-gourmet.jpg",      alt: "Mesa gourmet preparada con vajilla premium" },
-  { src: "/images/hero-jardin.jpg",       alt: "Jardines mediterráneos de El Corrihuelo" },
-  { src: "/images/flores-entrada.jpg",    alt: "Jardín en flor y zona de acceso a la finca" },
-  { src: "/images/paella-grupo.jpg",      alt: "Preparación de paella valenciana en zona exterior" },
-  { src: "/images/detalle-piscina.jpg",   alt: "Piscina privada con agua cristalina" },
-  { src: "/images/baile-noche.jpg",       alt: "Fiesta y música por la noche en El Corrihuelo" },
-  { src: "/images/guitarrista.jpg",       alt: "Actuación en directo con guitarrista" },
-  { src: "/images/grupo-exterior.jpg",    alt: "Grupo de invitados disfrutando de los jardines" },
-  { src: "/images/baile-dia.jpg",         alt: "Celebración y baile durante el día" },
+  { src: "/images/real/real-52.webp",  alt: "Piscina privada y solárium" },
+  { src: "/images/real/real-54.webp",  alt: "Gran Salón principal decorado" },
+  { src: "/images/real/real-58.webp",  alt: "Zona gourmet y mesa con aperitivos" },
+  { src: "/images/real/real-3.webp",   alt: "Entrada principal a los jardines" },
+  { src: "/images/real/real-1.webp",   alt: "Terraza exterior preparada para comer" },
+  { src: "/images/real/real-55.webp",  alt: "Parque infantil y zona de juegos" },
+  { src: "/images/real/real-53.webp",  alt: "Salón preparado para fiesta y karaoke" },
+  { src: "/images/real/real-2.webp",   alt: "Terraza con mesa de ping pong" },
+  { src: "/images/real/real-57.webp",  alt: "Zona de salón rústico con futbolín" },
+  { src: "/images/real/real-6.webp",   alt: "Comedor exterior en terraza cubierta" },
+  { src: "/images/real/real-56.webp",  alt: "Baño amplio con detalles azules" },
+  { src: "/images/real/real-59.webp",  alt: "Vista general del gran salón" },
 ];
 
 function Lightbox({

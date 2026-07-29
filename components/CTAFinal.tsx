@@ -22,7 +22,7 @@ export default function CTAFinal() {
         aria-hidden="true"
         style={{
           y, position: "absolute", inset: "-14%",
-          backgroundImage: "url('/images/hero-jardin.jpg')",
+          backgroundImage: "url('/images/real/real-3.webp')",
           backgroundSize: "cover", backgroundPosition: "center",
         }}
       />
