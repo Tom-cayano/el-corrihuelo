@@ -6,6 +6,8 @@ import Testimonials from "@/components/Testimonials";
 import Location from "@/components/Location";
 import FAQ from "@/components/FAQ";
 import Booking from "@/components/Booking";
+import Discover from "@/components/Discover";
+import Events from "@/components/Events";
 import CTAFinal from "@/components/CTAFinal";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -20,11 +22,17 @@ export default function Home() {
       {/* 1. Hero full-screen — primera impresión luxury */}
       <Hero />
 
-      {/* 2. Nuestras instalaciones — 9 espacios con fotos reales */}
+      {/* 2. Nosotros — Discover section */}
+      <Discover />
+
+      {/* 3. Nuestras instalaciones — 9 espacios con fotos reales */}
       <InstallationsGrid />
 
-      {/* 3. Galería inmersiva — Master-Detail */}
+      {/* 4. Galería inmersiva — Master-Detail */}
       <Gallery />
+
+      {/* 5. Eventos — Tipos de celebraciones */}
+      <Events />
 
       {/* 4. Por qué elegirnos — 6 ventajas Glassmorphism */}
       <Features />

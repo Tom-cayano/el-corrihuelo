@@ -9,22 +9,22 @@ const DISCOVER_DATA = [
   {
     title: "La Piscina",
     description: "Un oasis cristalino diseñado para el descanso absoluto bajo el sol mediterráneo. Rodeada de exuberante vegetación y áreas de sombra perfectas.",
-    image: "/images/terraza-piscina.jpg",
+    image: "/images/real/real-52.webp",
   },
   {
     title: "El Gran Salón",
     description: "Un espacio diáfano y elegante donde los detalles arquitectónicos se funden con el máximo confort. Ideal para acoger a todos tus invitados con estilo.",
-    image: "/images/hero-salon.jpg",
+    image: "/images/real/real-54.webp",
   },
   {
     title: "Jardines",
     description: "Miles de metros cuadrados de naturaleza cuidada al milímetro. Un entorno de paz exclusivo que aísla tu celebración del mundo exterior.",
-    image: "/images/hero-jardin.jpg",
+    image: "/images/real/real-16.webp",
   },
   {
     title: "Gastronomía",
     description: "Espacios pensados para el disfrute culinario. Ya sea contratando un catering profesional o preparando tus propias elaboraciones con todas las comodidades.",
-    image: "/images/mesa-gourmet.jpg",
+    image: "/images/real/real-58.webp",
   }
 ];
 

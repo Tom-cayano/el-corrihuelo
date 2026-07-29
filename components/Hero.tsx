@@ -46,12 +46,12 @@ export default function Hero() {
         aria-hidden="true"
       >
         <Image
-          src="/images/real/real-52.webp"
-          alt="Piscina y terraza de El Corrihuelo, finca de celebraciones premium en Murcia"
+          src="/images/real/real-54.webp"
+          alt="El Gran Salón preparado de El Corrihuelo, finca de celebraciones premium en Murcia"
           fill
           priority
           quality={95}
-          style={{ objectFit: "cover", objectPosition: "center 60%" }}
+          style={{ objectFit: "cover", objectPosition: "center 40%" }}
           sizes="100vw"
         />
       </motion.div>
@@ -76,23 +76,31 @@ export default function Hero() {
           y: contentY,
         }}
       >
-        {/* LOGO */}
+        {/* LOGO CON DEGRADADO DORADO PREMIUM */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+          initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-          style={{ marginBottom: "clamp(40px, 6vw, 60px)" }}
+          style={{ marginBottom: "clamp(32px, 5vw, 48px)" }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/logo-transparente.png"
-            alt="El Corrihuelo"
+          <div
             style={{
-              height: "clamp(120px, 18vw, 180px)",
-              width: "auto",
-              objectFit: "contain",
-              filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.45))", // Subtle shadow for elegance
+              width: "clamp(180px, 25vw, 260px)",
+              height: "clamp(70px, 10vw, 100px)",
+              margin: "0 auto",
+              background: "linear-gradient(135deg, #FFFBF0 0%, #E5D0A1 40%, #C9A96E 100%)",
+              WebkitMaskImage: "url(/images/logo-transparente.png)",
+              WebkitMaskSize: "contain",
+              WebkitMaskRepeat: "no-repeat",
+              WebkitMaskPosition: "center",
+              maskImage: "url(/images/logo-transparente.png)",
+              maskSize: "contain",
+              maskRepeat: "no-repeat",
+              maskPosition: "center",
+              filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.65))",
             }}
+            aria-label="El Corrihuelo"
+            role="img"
           />
         </motion.div>
 
@@ -103,7 +111,7 @@ export default function Hero() {
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
           style={{
             fontFamily: "Playfair Display, Georgia, serif",
-            fontSize: "clamp(2rem, 4.5vw, 4.2rem)",
+            fontSize: "clamp(2.4rem, 6vw, 5.5rem)",
             fontWeight: 400,
             color: "#fff",
             lineHeight: 1.1,

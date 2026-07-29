@@ -7,22 +7,22 @@ import { PhoneCall } from "lucide-react";
 
 const EVENT_TYPES = [
   {
-    title: "Cumpleaños",
-    description: "Espacios amplios para montar castillos hinchables, catering y música. Sorprende a los tuyos con una fiesta que recordarán siempre.",
-    image: "/images/baile-dia.jpg",
-    message: "Hola, me gustaría reservar El Corrihuelo para celebrar un cumpleaños."
+    title: "Cumpleaños y Fiestas",
+    description: "Espacios amplios para montar música en vivo, castillos hinchables y animación. Sorprende a los tuyos con una fiesta que recordarán siempre.",
+    image: "/images/real/real-41.webp",
+    message: "Hola, me gustaría reservar El Corrihuelo para celebrar un cumpleaños o fiesta."
   },
   {
     title: "Reuniones Familiares",
-    description: "Zonas diferenciadas para que los niños jueguen mientras los adultos disfrutan de una paella o barbacoa en la terraza.",
-    image: "/images/paella-grupo.jpg",
-    message: "Hola, me gustaría reservar El Corrihuelo para una reunión familiar."
+    description: "Zonas diferenciadas para que los niños jueguen mientras los adultos disfrutan de una paella gigante o barbacoa en la terraza cubierta.",
+    image: "/images/real/real-40.webp",
+    message: "Hola, me gustaría reservar El Corrihuelo para una reunión familiar con comida/paella."
   },
   {
-    title: "Eventos Privados",
-    description: "Despedidas, bodas íntimas o eventos corporativos. Absoluta privacidad y exclusividad para tu grupo.",
-    image: "/images/evento-grupo2.jpg",
-    message: "Hola, me gustaría reservar El Corrihuelo para un evento privado."
+    title: "Bodas y Ceremonias",
+    description: "Bodas íntimas, ceremonias al aire libre o eventos de empresa. Absoluta privacidad, montaje en los jardines y exclusividad para tu grupo.",
+    image: "/images/real/real-16.webp",
+    message: "Hola, me gustaría reservar El Corrihuelo para una boda íntima o evento privado."
   }
 ];
 
