@@ -76,54 +76,7 @@ export default function Hero() {
           y: contentY,
         }}
       >
-        {/* LOGO COMPUESTO PREMIUM */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            marginBottom: "clamp(32px, 5vw, 48px)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "24px",
-          }}
-        >
-          {/* Ilustración Original de la Casa y Olivo */}
-          <img
-            src="/images/logo-house.png"
-            alt="Ilustración El Corrihuelo"
-            style={{
-              width: "clamp(180px, 25vw, 220px)",
-              height: "auto",
-              objectFit: "contain",
-              filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.2))",
-            }}
-          />
 
-          {/* Tipografía Original con Degradado Dorado Específico */}
-          <div
-            style={{
-              width: "clamp(220px, 32vw, 360px)",
-              height: "clamp(45px, 6vw, 70px)",
-              background: "linear-gradient(to bottom, #FFF8E6 0%, #E6C77A 50%, #B98C3F 100%)",
-              WebkitMaskImage: "url(/images/logo-text-cropped.png)",
-              WebkitMaskSize: "contain",
-              WebkitMaskRepeat: "no-repeat",
-              WebkitMaskPosition: "center",
-              maskImage: "url(/images/logo-text-cropped.png)",
-              maskSize: "contain",
-              maskRepeat: "no-repeat",
-              maskPosition: "center",
-              // El drop-shadow con el mismo color del degradado (#E6C77A) añade el grosor de 5%
-              // contrast(1.25) aumenta la nitidez
-              // drop-shadow negro con 3px blur y 20% de opacidad para visibilidad
-              filter: "drop-shadow(0 0 1px #E6C77A) drop-shadow(0 2px 3px rgba(0,0,0,0.2)) contrast(1.25)",
-            }}
-            aria-label="El Corrihuelo - Casa Vacacional & Celebraciones"
-            role="img"
-          />
-        </motion.div>
 
         {/* Main Headline */}
         <motion.h1

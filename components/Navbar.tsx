@@ -56,6 +56,54 @@ export default function Navbar() {
           height: "100%", display: "flex", alignItems: "center",
           justifyContent: "space-between", gap: "24px",
         }}>
+          {/* ── LOGO (Overhanging style) ── */}
+          <div style={{ flexShrink: 0, width: "clamp(220px, 32vw, 360px)", position: "relative", alignSelf: "flex-start" }}>
+            <a
+              href="#inicio"
+              onClick={(e) => smoothScroll(e, "#inicio")}
+              style={{
+                position: "absolute",
+                top: "12px",
+                left: 0,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "16px",
+                textDecoration: "none",
+                // scale down slightly when scrolled so it doesn't take too much screen space? 
+                // The user requested: "mismo tamaño actual"
+              }}
+              aria-label="Inicio"
+            >
+              <img
+                src="/images/logo-house.png"
+                alt="Ilustración El Corrihuelo"
+                style={{
+                  width: "clamp(180px, 25vw, 220px)",
+                  height: "auto",
+                  objectFit: "contain",
+                  filter: "drop-shadow(0 2px 3px rgba(0,0,0,0.2))",
+                }}
+              />
+              <div
+                style={{
+                  width: "clamp(220px, 32vw, 360px)",
+                  height: "clamp(45px, 6vw, 70px)",
+                  background: "linear-gradient(to bottom, #FFF8E6 0%, #E6C77A 50%, #B98C3F 100%)",
+                  WebkitMaskImage: "url(/images/logo-text-cropped.png)",
+                  WebkitMaskSize: "contain",
+                  WebkitMaskRepeat: "no-repeat",
+                  WebkitMaskPosition: "center",
+                  maskImage: "url(/images/logo-text-cropped.png)",
+                  maskSize: "contain",
+                  maskRepeat: "no-repeat",
+                  maskPosition: "center",
+                  filter: "drop-shadow(0 0 1px #E6C77A) drop-shadow(0 2px 3px rgba(0,0,0,0.2)) contrast(1.25)",
+                }}
+                role="img"
+              />
+            </a>
+          </div>
 
           {/* ── DESKTOP NAV ── */}
           <nav className="hidden lg:flex" style={{ alignItems: "center", gap: "clamp(20px, 2.5vw, 36px)", width: "100%", justifyContent: "flex-start" }} aria-label="Menú principal">
