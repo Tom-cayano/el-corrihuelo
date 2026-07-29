@@ -6,18 +6,18 @@ import Image from "next/image";
 import { Expand, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const PHOTOS = [
-  { src: "/images/real/real-52.webp",  alt: "Piscina privada y solárium" },
+  { src: "/images/real/real-52.webp",  alt: "Piscina privada al atardecer" },
+  { src: "/images/real/real-16.webp",  alt: "Jardines preparados para ceremonia" },
+  { src: "/images/real/real-40.webp",  alt: "Elaboración de paellas gigantes para eventos" },
   { src: "/images/real/real-54.webp",  alt: "Gran Salón principal decorado" },
-  { src: "/images/real/real-58.webp",  alt: "Zona gourmet y mesa con aperitivos" },
-  { src: "/images/real/real-3.webp",   alt: "Entrada principal a los jardines" },
-  { src: "/images/real/real-1.webp",   alt: "Terraza exterior preparada para comer" },
-  { src: "/images/real/real-55.webp",  alt: "Parque infantil y zona de juegos" },
-  { src: "/images/real/real-53.webp",  alt: "Salón preparado para fiesta y karaoke" },
-  { src: "/images/real/real-2.webp",   alt: "Terraza con mesa de ping pong" },
-  { src: "/images/real/real-57.webp",  alt: "Zona de salón rústico con futbolín" },
-  { src: "/images/real/real-6.webp",   alt: "Comedor exterior en terraza cubierta" },
-  { src: "/images/real/real-56.webp",  alt: "Baño amplio con detalles azules" },
-  { src: "/images/real/real-59.webp",  alt: "Vista general del gran salón" },
+  { src: "/images/real/real-41.webp",  alt: "Celebraciones con música en vivo y flamenco" },
+  { src: "/images/real/real-1.webp",   alt: "Terraza exterior con mesas largas" },
+  { src: "/images/real/real-58.webp",  alt: "Zona gourmet con aperitivos premium" },
+  { src: "/images/real/real-17.webp",  alt: "Detalles decorativos en los jardines" },
+  { src: "/images/real/real-53.webp",  alt: "Fiestas personalizadas con decoración" },
+  { src: "/images/real/real-2.webp",   alt: "Zonas de ocio y mesas de ping pong" },
+  { src: "/images/real/real-55.webp",  alt: "Espacios seguros para los más pequeños" },
+  { src: "/images/real/real-59.webp",  alt: "Amplitud y confort en nuestros salones interiores" },
 ];
 
 function Lightbox({

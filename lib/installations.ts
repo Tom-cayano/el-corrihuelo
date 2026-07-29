@@ -97,8 +97,9 @@ export const INSTALLATIONS_DATA = [
     headline: "Naturaleza y privacidad total",
     shortDescription: "Miles de metros cuadrados de jardines cuidados al milímetro. Vegetación autóctona, rincones de descanso y total intimidad.",
     fullDescription: "Los jardines de El Corrihuelo son un universo propio. Con miles de metros cuadrados de naturaleza mediterránea cuidada al detalle, ofrecen espacios diferenciados para cada momento de tu celebración: rincones íntimos para la sobremesa, zonas amplias para el cóctel de bienvenida, y caminos rodeados de flores para pasear al atardecer.",
-    heroImage: "/images/real/real-3.webp",
+    heroImage: "/images/real/real-16.webp",
     gallery: [
+      "/images/real/real-16.webp",
       "/images/real/real-3.webp",
       "/images/real/real-52.webp",
       "/images/real/real-6.webp",
